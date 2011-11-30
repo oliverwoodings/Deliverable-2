@@ -1,0 +1,160 @@
+@charset "utf-8";
+/*************/
+/* CSS Reset */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+pre {
+	white-space: pre-wrap;
+	white-space: -moz-pre-wrap;
+	white-space: -pre-wrap;
+	white-space: -o-pre-wrap;
+	word-wrap: break-word;
+	font-family: Arial, Helvetica, sans-serif;
+}
+/* END RESET */
+/*************/
+
+
+/******************/
+/* GLOBAL STYLING */
+
+body {
+	font-family: ChampagneLimousines;
+	font-size: 17px;
+	color: #222;
+	height: 100%;
+	width: 100%;
+	background: #fffcfc;
+	overflow: auto;
+    background: -moz-radial-gradient(center, ellipse cover, #fffcfc 56%, #ede8e8 100%);
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(56%,#fffcfc), color-stop(100%,#ede8e8));
+    background: -webkit-radial-gradient(center, ellipse cover, #fffcfc 56%,#ede8e8 100%);
+    background: -o-radial-gradient(center, ellipse cover, #fffcfc 56%,#ede8e8 100%);
+    background: -ms-radial-gradient(center, ellipse cover, #fffcfc 56%,#ede8e8 100%);
+    background: radial-gradient(center, ellipse cover, #fffcfc 56%,#ede8e8 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fffcfc', endColorstr='#ede8e8',GradientType=1 );
+}
+
+input, textarea {  
+    padding: 6px;  
+    border: solid 1px #999;
+    outline: 0;  
+    font: normal 13px/100% Verdana, Tahoma, sans-serif;
+    background: #FFFFFF;
+	border-radius: 5px 5px 5px 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	margin: 2px;
+}
+    input:focus {  
+        -webkit-box-shadow: 0px 0px 5px #74ABE9;
+        -moz-box-shadow: 0px 0px 5px #74ABE9;
+        box-shadow: 0px 0px 5px #74ABE9;
+    }
+    
+a, a:visited {
+	color: #333;
+}
+a:hover {
+	color: #99C1E7;
+}
+
+/* FONTS */
+@font-face {
+    font-family: "DroidSerifRegular";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/droidserif-regular-webfont.eot?iefix") format("eot"), url("../fonts/droidserif-regular-webfont.woff") format("woff"), url("../fonts/droidserif-regular-webfont.ttf") format("truetype"), url("../fonts/droidserif-regular-webfont.svg#webfont3T3iKsko") format("svg");
+}
+@font-face {
+    font-family: "ChampagneLimousines";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/champagne-limousines.eot?iefix") format("eot"), url("../fonts/champagne-limousines.woff") format("woff"), url("../fonts/champagne-limousines.ttf") format("truetype"), url("../fonts/champagne-limousines.svg#webfont3T3iKsko") format("svg");
+}
+
+/* ALERT BOXES */
+.errorMsg {
+	width: 300px;
+	font-size: 14px;
+	margin: 10px;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+	.errorMsg p {
+		font-size: 14px;
+		line-height: 40px;
+	}
+	.errorMsg span {
+		margin-top: 12px;
+	}
+
+/* END GLOBAL */
+/**************/
+
+/* OUTER CONTAINER */
+.wrapper {
+	width: 1000px;
+	background-image: url('../images/outer-shadow.png');
+	background-repeat: repeat-y;
+	margin-left: auto;
+	margin-right: auto;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -41px;
+}
+
+/* HEADER */
+.header {
+	background-image: url('../images/header.png');
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+	width: 100%;
+	height: 150px;
+	margin-bottom: 30px;
+	margin-left: 50px;
+}
+
+/* CONTENT CONTAINER */
+.contentContainer {
+	width: 880px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-bottom: 20px;
+	padding-top: 10px;
+}
+
+/* PUSH FOOTER */
+.push {
+	height: 41px;
+}
+
+/* FOOTER */
+.footer {
+	height: 40px;
+	text-align: center;
+	line-height: 40px;
+	width: 900px;
+	margin-left: auto;
+	margin-right: auto;
+	border-top: 1px solid #CCC;
+	clear: both;
+}
+

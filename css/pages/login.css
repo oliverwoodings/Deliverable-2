@@ -1,0 +1,20 @@
+/* LOGIN DIV */
+.loginForm {
+	width: 250px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+}
+
+/* LOGIN FIELDS */
+.username {
+	
+}
+.password {
+	margin-top: 10px;
+	margin-left: 3px;
+}
+#submitButton {
+	margin-left: 70px;
+	margin-top: 20px;
+}
