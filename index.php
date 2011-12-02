@@ -26,7 +26,7 @@
 		function __construct() {
 			
 			$this->config = new Config();
-			$this->db     = new Db();
+			$this->db     = new Db($this);
 			$this->cache  = new Cache();
 			$this->page   = (isset($_GET["page"]) ? $_GET["page"] : $this->config->general["defaultPage"]);
 			$this->title  = $this->config->general["defaultTitle"];
