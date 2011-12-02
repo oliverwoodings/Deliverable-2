@@ -59,7 +59,7 @@
 			$compiledTitle = $this->title . " | " . $this->config->general["titleSuffix"];
 			$userStatus = "Welcome, Guest. <a href='index.php?page=login'>Login</a>";
 			if ($this->auth->isLoggedIn())
-				$userStatus = "Welcome, " . $this->auth->getUsername() . '. <a href="index.php?page=login&get=logout">Logout</a>';
+				$userStatus = '<a href="index.php?page=login&get=logout">Logout (' . $this->auth->getUsername() . ')</a>';
 				
 			?>
 			<html> 
@@ -80,25 +80,105 @@
 					?>
 				</head>
 				<body>
-					<div class="wrapper">
-						<div class="header">
-						
-						</div>
-						<div class="contentContainer">
+				
+					<!-- Top Links -->
+			        <div id="main-toplinks">
+			           <p class="left">
+			           	<a href="http://www.lboro.ac.uk/accessibility/">Accessibility</a> | 
+			            <a href="http://www.lboro.ac.uk/contact.html">Getting in touch</a> | 
+			            <a href="http://www.lboro.ac.uk/about/findus.html">How to find us</a>  
+			           </p>
+			           <p class="right"></p>
+			           <div class="clear"></div>
+			        </div>
+			        
+			        <div id="main">
+	            
+			            <!-- Main Header -->
+			            <div id="main-header">
+			       
+			                <!-- Contact Info -->
+			                <div class="leftbox">
+			                    Loughborough University<br />
+			                    Leicestershire, UK<br />
+			                    LE11 3TU<br />
+			                    +44 (0)1509 263171
+			                </div>
+			                <div class="rightbox">
+			                    <a href="http://www.lboro.ac.uk"><img src="images/lulogo_204_52.jpg" alt="Loughborough University" width="204" height="52" /></a>
+			                </div>
+			                
+			                <!-- Navigation Bar -->
+			                <div id="main-header-menu">
+			                    <ul>
+			                        <li><a href="http://www.lboro.ac.uk/" class="rightborder">University home</a></li>
+			                        <li><a href="http://www.lboro.ac.uk/prospectus/" class="rightborder">Prospective students</a></li>
+			                        <li><a href="http://www.lboro.ac.uk/international/" class="rightborder">International</a></li>
+			                        <li><a href="http://www.lboro.ac.uk/news/" class="rightborder">News and events</a></li>
+			                        <li><a href="http://www.lboro.ac.uk/about/" class="rightborder">About us</a></li>
+			                        <li><a href="http://www.lboro.ac.uk/departments/" class="rightborder">Faculties and departments</a></li>
+			                        <li><a href="http://www.lboro.ac.uk/research/" class="rightborder">Research</a></li>
+			                        <li><a href="http://www.lboro.ac.uk/business/">Working with business</a></li>
+			                    </ul>
+			                </div>
+			                    
+			            </div>
+			            
+			            <!-- Main Title -->
+			            <div id="main-title">
+			                <h1>Loughborough University Timetabling</h1>
+			            </div>
+			            
+			            <!-- Breadcrumb -->
+			            <div id="breadcrumb">
+			            	<div class="menu_container">
+				                <ul class="main_menu">
+				                    <li><a href="index.php">Home</a></li>
+				                    <li><a href="RequestRoom.php">Request Room</a></li>
+				                    <li><a href="#">Pending Requests</a></li>
+				                    <li>
+				                        <a href="#">Allocated Rooms</a>
+				                        <ul>
+				                            <li><a href="#">Priority Round</a></li>
+				                            <li><a href="#">Round 1</a></li>
+				                            <li class="bottomli"><a href="#">Round 2</a></li>
+				                        </ul>
+				                    </li>
+				                    <li class="last"><a href="#">Room Bookings</a></li>
+				                </ul>
+			                </div>
+			                <div class="logout"><a href="login.php">Logout (Computer Science) </a></div>
+			            </div>
+			            
+			            <div id="main-content">
+		            
 			<?php
 		}
 		
 		//Display global footer
 		function displayFooter() {
-			?>
+			?>			
 						</div>
-						<div class="push">
 						
-						</div>
-					</div>
-					<div class="footer">
-						&copy; Team 03 2011
-					</div>
+						<div id="footertext">
+							<span>If you have any problems regarding your timetable please contact your departmental administrator</span>
+			            </div>
+			  			<div id="footertext" >
+			            	Website maintained by: <a href="mailto:it.services@lboro.ac.uk">IT.Services@lboro.ac.uk</a>
+			            </div>
+			            <div id="main-footer"></div>
+			            
+			            </div>
+			            <!-- Bottom Links -->
+			            <div id="main-botlinks">
+			              <p class="left"> <span class="whitetxt">&copy; Loughborough University</span></p>
+			              <p class="right"> <a href="http://www.lboro.ac.uk/disclaimer.html">Legal information</a> | 
+			              <a href="http://www.lboro.ac.uk/admin/ar/policy/foi/">Freedom of Information</a> | 
+			              <a href="#top">Top of page</a> </p>
+			              <div class="clear"></div>
+			            </div>
+			            
+			    	</div>
 							
 				</body>
 			</html>
