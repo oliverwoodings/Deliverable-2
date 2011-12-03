@@ -26,7 +26,7 @@
 			$this->general["defaultPage"]  = "home";
 			$this->general["defaultTitle"] = "Home";
 			$this->general["titleSuffix"]  = "Loughborough Timetabling";
-			$this->general["authFile"]     = "authAll.php";
+			$this->general["authFile"]     = "authDB.php"; # Set to authDB.php for database auth or authAll.php for no auth
 			
 		}
 		

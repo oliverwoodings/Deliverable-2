@@ -93,7 +93,6 @@ a:hover {
 	margin-right: auto;
 	margin-bottom: 0px;
 	margin-left: auto;
-	background-color: #FFFFFF;
 	text-align: left;
 	padding-bottom: 0px;
 }
@@ -101,10 +100,13 @@ a:hover {
 	background-image: url(../images/footer-bot-960.gif);
 	background-repeat: no-repeat;
 	background-position: center bottom;
+	background-color: #fff;
 	margin: 0px;
 	padding: 0px;
-	height: 20px;
-	width: 100%;
+	height: 110px;
+	width: 960px;
+	margin-left: auto;
+	margin-right: auto;
 	clear: both;
 }
 
@@ -149,6 +151,19 @@ a:hover {
 }
 #main-toplinks a:hover, #main-botlinks a:hover {
 	text-decoration: underline;
+}
+#main-toplinks, #main-botlinks {
+	width: 920px;
+	margin-top: 10px;
+	margin-right: auto;
+	margin-bottom: 9px;
+	margin-left: auto;
+	color: #999999;
+	font-size: 85%;
+	padding: 0px;
+}
+#main-botlinks {
+	margin-top: 30px;
 }
 
 
@@ -288,16 +303,6 @@ a:hover {
 		background-position: left top;
 		background-color: #DDDDDD;
 	}
-#main-toplinks, #main-botlinks {
-	width: 920px;
-	margin-top: 10px;
-	margin-right: auto;
-	margin-bottom: 9px;
-	margin-left: auto;
-	color: #999999;
-	font-size: 85%;
-	padding: 0px;
-}
 
 
 
@@ -322,13 +327,13 @@ a:hover {
 
 #main-content {
 	float: left;
-	width: 920px;
-	margin-top: 1em;
+	width: 100%;
 	margin-right: 0px;
 	margin-bottom: 0px;
-	margin-left: 20px;
 	padding: 0px;
-	padding-bottom: 20px;
+	padding-top: 40px;
+	padding-bottom: 40px;
+	background-color: #fff;
 }
 	#main-content h2, #main-content-wide h2 {
 		margin-top: 0;
@@ -539,13 +544,13 @@ a:hover {
 	.main_menu a {
 		text-decoration: none;
 		color: white;
-		padding-left: 20px;
-		padding-right: 20px;
+		padding-left: 25px;
+		padding-right: 25px;
 		display: block;
 		position: relative;
 		line-height: 30px;
 	}
-	.main_menu a:hover, .main_menu li:hover>a {
+	.main_menu li:hover {
 		background-image: url('../images/tabs-bg-hover.png');
 	}
 	.main_menu li li {	/* create borders around each item */
