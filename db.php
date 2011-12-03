@@ -14,6 +14,13 @@
 		}
 		
 		/**
+		 * Creates default tables if they don't exist
+		 */
+		private function createTables() {
+			
+		}
+		
+		/**
 		 * Base MySQL query function. Cleans all parameters to prevent injection
 		 */
 		function query() {
@@ -31,13 +38,11 @@
 		}
 		
 		/**
-		 * Creates default tables if they don't exist
+		 * Check login details
 		 */
-		private function createTables() {
-			
+		public function checkLoginDetails($username, $password) {
+			return true;
 		}
-		
-		
 		
 		
 	}

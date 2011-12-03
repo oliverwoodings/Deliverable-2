@@ -67,20 +67,6 @@ a:hover {
 	color: #CC0066;
 }
 
-/* FONTS */
-@font-face {
-    font-family: "DroidSerifRegular";
-    font-style: normal;
-    font-weight: normal;
-    src: url("../fonts/droidserif-regular-webfont.eot?iefix") format("eot"), url("../fonts/droidserif-regular-webfont.woff") format("woff"), url("../fonts/droidserif-regular-webfont.ttf") format("truetype"), url("../fonts/droidserif-regular-webfont.svg#webfont3T3iKsko") format("svg");
-}
-@font-face {
-    font-family: "ChampagneLimousines";
-    font-style: normal;
-    font-weight: normal;
-    src: url("../fonts/champagne-limousines.eot?iefix") format("eot"), url("../fonts/champagne-limousines.woff") format("woff"), url("../fonts/champagne-limousines.ttf") format("truetype"), url("../fonts/champagne-limousines.svg#webfont3T3iKsko") format("svg");
-}
-
 /* ALERT BOXES */
 .errorMsg {
 	width: 300px;
