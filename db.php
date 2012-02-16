@@ -14,6 +14,26 @@
 		}
 		
 		/**
+		 * Check login details
+		 */
+		public function checkLoginDetails($username, $password) {
+			return true;
+		}
+				
+		/**
+		 * Base MySQL query function. Cleans all parameters to prevent injection
+		 */
+		public function query() {
+			$args = func_get_args();
+			$sql = array_shift($args);
+			foreach ($args as $key => $value)
+				$args[$key] = $this->clean($value);
+			$res = mysql_query(vsprintf($sql, $args));
+			//Error handling
+			if (mysql_error() != "") die(mysql_error());
+		}
+		
+		/**
 		 * Creates default tables if they don't exist
 		 */
 		private function createTables() {
@@ -148,27 +168,10 @@
 		}
 		
 		/**
-		 * Base MySQL query function. Cleans all parameters to prevent injection
-		 */
-		function query() {
-			$args = func_get_args();
-			$sql = array_shift($args);
-			foreach ($args as $key => $value)
-				$args[$key] = $this->clean($value);
-			return mysql_query(vsprintf($sql, $args));
-		}
-		/**
 		 * Stops MySQL injection
 		 */
 		private function clean($string) {
 			return mysql_real_escape_string(trim($string));
-		}
-		
-		/**
-		 * Check login details
-		 */
-		public function checkLoginDetails($username, $password) {
-			return true;
 		}
 		
 		
