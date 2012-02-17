@@ -9,7 +9,7 @@
 			
 			//Include database information
 			global $host, $user, $pass, $db;
-			include("../db-info.php");
+			//include("../db-info.php");
 		
 			/**
 			 * Database settings
