@@ -18,7 +18,7 @@
 		public $page;
 		public $cache;
 		public $get;
-		public $pages = array("home", "actionresult", "login");
+		public $pages = array("home", "actionresult", "login", "modules", "request", "response");
 		public $title;
 		public $navbar = array();
 		public $refresh = false;
