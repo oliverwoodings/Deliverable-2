@@ -14,11 +14,11 @@
 			/**
 			 * Database settings
 			 */
-			$this->database["host"]   = $host;
+			/*$this->database["host"]   = $host;
 			$this->database["user"]   = $user;
 			$this->database["pass"]   = $pass;
 			$this->database["db"]     = $db;
-			$this->database["enable"] = true;
+			$this->database["enable"] = true;*/
 			
 			/**
 			 * General settings
