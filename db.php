@@ -13,6 +13,13 @@
 			$this->createTables();
 		}
 		
+		
+		public function getRequestById($id) {
+			$sql = "SELECT * FROM request,module,department,park,building,status,round WHERE request.request_id = $id AND request.module_id = module.module_id AND department.department_id = module.department_id AND request.request_id = park.park_id AND request.building_id = building.building_id AND request.status_id = status.status_id AND request.round_id = round.round_id";
+			$res = $this->query($sql);
+			print_r($res);
+		}
+		
 		/**
 		 * Check login details
 		 */
@@ -26,9 +33,13 @@
 		public function query() {
 			$args = func_get_args();
 			$sql = array_shift($args);
-			foreach ($args as $key => $value)
-				$args[$key] = $this->clean($value);
-			$res = mysql_query(vsprintf($sql, $args));
+			if (count($args) > 0) {
+				foreach ($args as $key => $value)
+					$args[$key] = $this->clean($value);
+				$res = mysql_query(vsprintf($sql, $args));
+			} else {
+				$res = mysql_query($sql);
+			}
 			//Error handling
 			if (mysql_error() != "") die(mysql_error());
 		}
@@ -38,59 +49,67 @@
 		 */
 		private function createTables() {
 			
-			$sql = "
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `allocation` (
 				  `request_id` int(11) NOT NULL,
 				  `room_id` int(11) NOT NULL,
 				  `period` int(11) NOT NULL,
 				  `declined` tinyint(1) NOT NULL,
 				  PRIMARY KEY (`request_id`,`room_id`,`period`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-				
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+			
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `building` (
 				  `building_id` int(11) NOT NULL AUTO_INCREMENT,
-				  `building_name` varchar(50) NOT NULL,
+				  `building_name` varchar(50) NOT NULL UNIQUE,
 				  `park_id` int(11) NOT NULL,
 				  PRIMARY KEY (`building_id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-				
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
+			
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `department` (
 				  `department_id` int(11) NOT NULL AUTO_INCREMENT,
-				  `department_name` varchar(70) NOT NULL,
+				  `department_name` varchar(70) NOT NULL UNIQUE,
 				  PRIMARY KEY (`department_id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-				
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
+			
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `facility` (
 				  `facility_id` int(11) NOT NULL AUTO_INCREMENT,
-				  `facility_name` varchar(50) NOT NULL,
+				  `facility_name` varchar(50) NOT NULL UNIQUE,
 				  PRIMARY KEY (`facility_id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
 				
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `lecturer` (
 				  `lecturer_id` int(11) NOT NULL AUTO_INCREMENT,
-				  `lecturer_name` varchar(70) NOT NULL,
+				  `lecturer_name` varchar(70) NOT NULL UNIQUE,
 				  PRIMARY KEY (`lecturer_id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
 				
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `module` (
 				  `module_id` int(11) NOT NULL AUTO_INCREMENT,
-				  `module_name` varchar(100) NOT NULL,
+				  `module_name` varchar(100) NOT NULL UNIQUE,
 				  `department_id` int(11) NOT NULL,
 				  PRIMARY KEY (`module_id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
 				
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `module_lecturer` (
 				  `module_id` int(11) NOT NULL,
 				  `lecturer_id` int(11) NOT NULL,
 				  PRIMARY KEY (`module_id`,`lecturer_id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 				
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `park` (
 				  `park_id` int(11) NOT NULL AUTO_INCREMENT,
 				  `park_name` varchar(50) NOT NULL,
 				  PRIMARY KEY (`park_id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
 				
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `request` (
 				  `request_id` int(11) NOT NULL AUTO_INCREMENT,
 				  `round_id` int(11) NOT NULL,
@@ -107,46 +126,53 @@
 				  `priority` tinyint(1) NOT NULL,
 				  `spec_req` varchar(400) NOT NULL,
 				  PRIMARY KEY (`request_id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
 				
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `requested_week` (
 				  `request_id` int(11) NOT NULL,
 				  `week` int(2) NOT NULL,
 				  PRIMARY KEY (`request_id`,`week`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-				
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+			
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `request_facility` (
 				  `request_id` int(11) NOT NULL,
 				  `facility_id` int(11) NOT NULL,
 				  PRIMARY KEY (`request_id`,`facility_id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-				
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+			
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `room` (
 				  `room_id` int(11) NOT NULL AUTO_INCREMENT,
 				  `building_id` int(11) NOT NULL,
-				  `room_name` varchar(50) NOT NULL,
+				  `room_name` varchar(50) NOT NULL UNIQUE,
 				  `room_code` varchar(20) NOT NULL,
 				  PRIMARY KEY (`room_id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-				
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
+			
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `room_facility` (
 				  `room_id` int(11) NOT NULL,
 				  `facility_id` int(11) NOT NULL,
 				  PRIMARY KEY (`room_id`,`facility_id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 				
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `room_request` (
 				  `booking_id` int(11) NOT NULL,
 				  `room_id` int(11) NOT NULL,
 				  PRIMARY KEY (`booking_id`,`room_id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 				
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `room_type` (
 				  `type_id` int(11) NOT NULL AUTO_INCREMENT,
 				  `type` varchar(50) NOT NULL,
 				  PRIMARY KEY (`type_id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
 				
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `round` (
 				  `round_id` int(11) NOT NULL AUTO_INCREMENT,
 				  `round` int(11) NOT NULL,
@@ -154,16 +180,14 @@
 				  `end_date` date NOT NULL,
 				  `active` tinyint(1) NOT NULL,
 				  PRIMARY KEY (`round_id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
 				
+			$this->query("
 				CREATE TABLE IF NOT EXISTS `status` (
 				  `status_id` int(11) NOT NULL AUTO_INCREMENT,
-				  `status_name` varchar(40) NOT NULL,
+				  `status_name` varchar(40) NOT NULL UNIQUE,
 				  PRIMARY KEY (`status_id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-				";
-			
-			$this->query($sql);
+				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
 			
 		}
 		
