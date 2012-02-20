@@ -151,7 +151,7 @@
 								</div>
 								
 								<!-- Round Indicator -->
-								<div id="ri" class="roundInd"><h3>1</h3></div> 
+								<div id="ri" class="roundInd" title="Round 1"><h3>1</h3></div> 
 				                
 				                <!-- Logout Button -->
 				                <div class="logout"><a href="index.php?page=login&get=logout">Logout (Computer Science) </a></div>

@@ -1,0 +1,161 @@
+/* =============== */
+/* ROUND INDICATOR */
+/* =============== */
+.circle{
+	width:100px;
+	height:100px;
+	background-color:#330066;
+	color:white;
+	border-radius:50px;
+	opacity: 1;
+	float:left;
+	z-index: 12;
+	position: relative;
+	margin-right:10px;
+	margin-left:10px;
+}
+.circle_small{
+	width:60px;
+	height:60px;
+	background-color:#e1dae8;//#330066;
+	color:white;
+	border-radius:30px;
+	//opacity: 0.2;
+	float:left;
+	margin:30px;
+	position:relative;
+	top:-8px;
+}
+.circle_small h3{
+	position:relative;
+	color:white;
+	border:none !important;
+	text-align: center;
+	z-index: 12;
+}
+.circle h3{
+	position:relative;
+	top:10px;
+	//left:5px;
+	text-align:center;
+	text-decoration: none;
+	border:none !important;
+}	
+#line{
+	width:600px;
+	position: relative;
+	left: -70px;
+	top: -70px;
+	border:1px solid #e1dae8;//#330066;;
+	height:0px;
+	color: #330066;
+	border-style: dashed;
+	//opacity: 0.2;
+}
+#timeline{
+	margin-left:90px;
+	margin-bottom:20px;
+}
+
+
+/* ========== */
+/* Containers */
+/* ========== */
+#left_side{
+	float:left;
+	margin-left: 40px;
+}
+#right_side{
+	float:left;
+	margin-left: 40px;
+}
+
+
+/* ======== */
+/* Activity */
+/* ======== */
+#activity_feed{
+	width:415px;
+	float:left;
+}
+#activity_feed h2{
+	border-bottom: 1px solid grey;
+	color: #C06;
+}
+
+#activity_feed #stream{
+	width:100%;
+	height:200px;
+	overflow-y: auto;
+	//border:2px solid #330066;
+	padding:0px;
+	margin:0px;
+}
+
+#activity_feed #stream ul{
+	padding:5px;
+	margin:0px;	
+}
+
+#activity_feed ul li.begin{
+	background-color:#e1dae8;
+}
+#activity_feed .item{
+	padding:6px 0px 6px 0px;
+	border-bottom: 1px solid grey;
+	cursor: pointer;
+}
+#activity_feed .item:hover{
+	background-color:#F4F0EF;//#f1eaf8;
+}
+
+.click{
+	background-color:#F4F0EF !important;
+}
+
+#activity_feed .item p{
+	padding:0px;
+	margin:0px;
+}
+#activity_feed .item p span.date{
+	margin-right:200px;
+	text-align: left;
+	font-size:0.9em; //11px;
+	color: #306;
+	padding: 0px;
+	margin:0px;
+}
+
+
+/* ============= */
+/* ATTENTION BOX */
+/* ============= */
+#request_attention{
+	width:415px;
+	margin-bottom:20px;
+}
+
+#request_attention h2{
+	border-bottom: 1px solid grey;
+	color: #C06;
+}
+
+#req_att_table th{
+	font-size:15px;
+	text-align:center;
+	padding:5px 0px 0px 0px;
+}
+#req_att_table tr{
+	height:30px;
+}
+#req_att_table td {
+	cursor:pointer;
+}
+
+.tableHighlight {
+	background-color: #A2A4FF !important;
+}
+
+/* ======== */
+/* Tool Tip */
+/* ======== */

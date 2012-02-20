@@ -85,6 +85,19 @@ a:hover {
 	.errorMsg span {
 		margin-top: 12px;
 	}
+	
+/* Tooltips */
+.tooltip {
+	color:white;
+	font-weight:bold;
+	background-color:#cc0066;
+	border:5px solid #cc0066;
+	opacity: 0.8;
+	padding:5px;
+	border-radius: 5px;
+	display: none;
+	z-index: 3000;
+}
 
 /* END GLOBAL */
 /**************/
@@ -588,7 +601,6 @@ a:hover {
 	border: 2px solid #CCC;
 	margin-left: 15px;
 	margin-top: -10px;
-	z-index: 1000;
 	left: 870px;
 }
  	.roundInd h3 {
