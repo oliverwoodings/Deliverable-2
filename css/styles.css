@@ -247,7 +247,7 @@ a:hover {
 		padding-left: 0px;
 		list-style-type: none;
 		margin: 0px;
-		padding-top: 4px;
+		padding-top: 6px;
 		padding-right: 0px;
 		padding-bottom: 4px;
 		margin-top: -1px;
@@ -260,7 +260,7 @@ a:hover {
 		height: 100%;
 	}
 	#main-header-menu ul li a {
-		padding-top: 4px;
+		padding-top: 6px;
 		padding-right: 8px;
 		padding-bottom: 4px;
 		padding-left: 8px;
@@ -336,6 +336,7 @@ a:hover {
 	padding-top: 40px;
 	padding-bottom: 40px;
 	background-color: #fff;
+	z-index: 0;
 }
 	#main-content h2, #main-content-wide h2 {
 		margin-top: 0;
@@ -485,11 +486,12 @@ a:hover {
 
 #breadcrumb { 
     width: 100%;
-	background-image: url('../images/tabs-bg.png');
+	background-color: #DDD;
     font-size: 95%;
     background-repeat: repeat-x;
-    height:30px;
+    height: 20px;
     text-align: center;
+    border-bottom: 1px solid #bbb;
 }
 
 .menu_container {
@@ -501,7 +503,8 @@ a:hover {
 	border:0px;
 	list-style-type: none;
 	display: block;
-	height: 30px;
+	height: 20px;
+	margin-left: 30px;
 }
 	.main_menu li{
 		margin:0px;
@@ -511,9 +514,12 @@ a:hover {
 		float:left;
 		position: relative;
 		z-index: 5;
-		border-left: 1px solid #999999;
+		border-right: 1px solid #999999;
 		color: white;
 		height: 100%;
+	}
+	.main_menu li a {
+		margin-top: 1px;
 	}
 	.main_menu li.last{
 		border-right:none;
@@ -545,15 +551,15 @@ a:hover {
 	}
 	.main_menu a {
 		text-decoration: none;
-		color: white;
-		padding-left: 25px;
-		padding-right: 25px;
+		color: #333;
+		padding-left: 15px;
+		padding-right: 15px;
 		display: block;
 		position: relative;
-		line-height: 30px;
+		line-height: 20px;
 	}
 	.main_menu li:hover {
-		background-image: url('../images/tabs-bg-hover.png');
+		background-color: #CCC;
 	}
 	.main_menu li li {	/* create borders around each item */
 		border: 1px solid #ccc;
@@ -572,11 +578,36 @@ a:hover {
 		-moz-border-radius-bottomright: 4px;
 		-moz-border-radius-bottomleft: 4px;
 	}
+	
+.roundInd {
+	position: absolute;
+	width: 36px;
+	height: 36px;
+	background-color: #330066;
+	border-radius: 20px;
+	border: 2px solid #CCC;
+	margin-left: 15px;
+	margin-top: -10px;
+	z-index: 1000;
+	left: 870px;
+}
+ 	.roundInd h3 {
+ 		color: white;
+ 		border:none !important;
+ 		text-align: center;
+		line-height: 36px;
+ 	}
+	
+.semTitle {
+	float: left;
+	margin-left: 10px;
+	margin-top: 2px;
+}
 
 .logout {
 	float: right;
 	margin-right: 30px;
-	line-height: 30px;
+	line-height: 20px;
 }
 	.logout a {
 		text-decoration: none;

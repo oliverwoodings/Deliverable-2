@@ -20,7 +20,6 @@
 		public $get;
 		public $pages = array("home", "actionresult", "login", "modules", "request", "response");
 		public $title;
-		public $navbar = array();
 		public $refresh = false;
 		
 		function __construct() {
@@ -38,9 +37,6 @@
 			//See if there is a 'get' to do
 			if (isset($_GET["get"])) $this->get = strtolower($_GET["get"]);
 			else unset($this->get);
-			
-			//Add nav elements	
-			$this->addNavElement("index.php", "Home");
 			
 			//Include requested page
 			if (!in_array($this->page, $this->pages)) {
@@ -133,24 +129,36 @@
 				            
 				            <!-- Breadcrumb -->
 				            <div id="breadcrumb">
+				            	
+				            	<!-- Menu -->
 				            	<div class="menu_container">
 					                <ul class="main_menu">
 					                    <li><a href="index.php">Home</a></li>
-					                    <li><a href="RequestRoom.php">Request Room</a></li>
-					                    <li><a href="#">Pending Requests</a></li>
-					                    <li>
-					                        <a href="#">Allocated Rooms</a>
-					                        <ul>
-					                            <li><a href="#">Priority Round</a></li>
-					                            <li><a href="#">Round 1</a></li>
-					                            <li class="bottomli"><a href="#">Round 2</a></li>
-					                        </ul>
-					                    </li>
-					                    <li class="last"><a href="#">Room Bookings</a></li>
+					                    <li><a href="index.php?page=requests">Make Request</a></li>
+					                    <li><a href="index.php?page=responses">Request/Response Status</a></li>
+					                    <li><a href="index.php?page=roomavailability">Room Availability</a></li>
+					                    <li class="last"><a href="index.php?page=modules">Modules</a></li>
 					                </ul>
 				                </div>
+				                
+				                <!-- Semester Title & Buttons -->
+								<div id="semTitle" class="semTitle" >
+									<b> Semester: </b>
+									<span class="semSel">	
+										<input type="radio" id="sem1" name="sem" checked="checked" value="1" /> 1
+										<input type="radio" id="sem2" name="sem" value="2" /> 2
+									</span>
+								</div>
+								
+								<!-- Round Indicator -->
+								<div id="ri" class="roundInd"><h3>1</h3></div> 
+				                
+				                <!-- Logout Button -->
 				                <div class="logout"><a href="index.php?page=login&get=logout">Logout (Computer Science) </a></div>
 				            </div>
+				            
+
+
 			            
 			            </div>
 			            

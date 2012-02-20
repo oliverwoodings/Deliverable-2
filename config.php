@@ -9,16 +9,16 @@
 			
 			//Include database information
 			global $host, $user, $pass, $db;
-			//include("../db-info.php");
+			include("../db-info.php");
 		
 			/**
 			 * Database settings
 			 */
-			/*$this->database["host"]   = $host;
+			$this->database["host"]   = $host;
 			$this->database["user"]   = $user;
 			$this->database["pass"]   = $pass;
 			$this->database["db"]     = $db;
-			$this->database["enable"] = true;*/
+			$this->database["enable"] = true;
 			
 			/**
 			 * General settings

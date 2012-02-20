@@ -90,6 +90,7 @@
 			$this->query("
 				CREATE TABLE IF NOT EXISTS `module` (
 				  `module_id` int(11) NOT NULL AUTO_INCREMENT,
+				  `module_code` varchar(100) NOT NULL UNIQUE,
 				  `module_name` varchar(100) NOT NULL UNIQUE,
 				  `department_id` int(11) NOT NULL,
 				  PRIMARY KEY (`module_id`)
@@ -175,7 +176,7 @@
 			$this->query("
 				CREATE TABLE IF NOT EXISTS `round` (
 				  `round_id` int(11) NOT NULL AUTO_INCREMENT,
-				  `round` int(11) NOT NULL,
+				  `round` varchar(1) NOT NULL,
 				  `start_date` date NOT NULL,
 				  `end_date` date NOT NULL,
 				  `active` tinyint(1) NOT NULL,
