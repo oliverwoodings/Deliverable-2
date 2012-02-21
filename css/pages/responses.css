@@ -1,0 +1,497 @@
+#top	{
+	align:center;
+	overflow:hidden;
+	margin-top: -40px;
+}
+		
+#ModSearch	{
+	float:left;
+	width:315px;
+	margin-left:5px;
+}
+			
+#filters{
+	float:left;
+	width:400px;
+	overflow:hidden;
+}
+	
+#type	{
+	float:left;
+	width:200px;
+}
+		
+#Round	{
+	float:left;
+	width:195px;
+	margin-top: 5px;
+}
+			
+#Part	{
+	float:left;
+	width:195px;
+	margin-top: 5px;
+}
+		
+#Day	{
+	float:left;
+	width:300px;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+					
+ul#list  { 
+	list-style-type: none;
+	width:130px;
+	margin-right:auto;
+}
+	
+ul#partlist   { 
+	list-style-type: none;
+	width:130px;
+	margin-right:auto;
+}	
+	
+#day ul{ 
+	width:100%;
+	list-style-type: none;
+}
+			
+#day ul li{
+	display:inline;	
+	float:left;
+	padding:5px;
+}
+		
+#modulesearch	{
+	display:block;
+	height:30px;
+	width:220px;
+	border:1px solid grey;
+	line-height:110%;
+	font-size:15px;
+	font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
+	resize: none;
+}
+					
+.heading	{
+	font-size:15px;
+	padding:0px;
+	margin-bottom:0.5em;
+	margin-top:1em;
+}
+
+#roundp {
+	display: block;
+}
+
+#round1 {
+	display: block;
+}
+
+#round2 {
+	display: block;
+}
+
+#checkboxcol1 {
+	float: left;
+}
+
+#checkboxcol2 {
+	float: left;
+	margin-left: 20px;
+}
+
+#checkboxcol3 {
+	float: left;
+	margin-left: 20px;
+}
+
+#roundcheckbox1 {
+	float: left;
+}
+
+#roundcheckbox2 {
+	float: left;
+	margin-left: 20px;
+}
+
+#roundcheckbox3 {
+	float: left;
+	margin-left: 20px;
+}
+		
+#allocated	{
+	background-color: rgba(162,205,90,0.6);
+	padding:5px;
+}
+			
+#failed	{
+	background-color: rgba(255,106,106,0.6);
+	padding:5px;
+}
+			
+#pending	{
+	background-color: rgba(240,237,69,0.6);
+	padding:5px;
+}
+		
+#declined	{
+	background-color: rgba(153,204,255,0.6);
+	padding:5px;
+}
+
+#divContainer {
+			height: 1000px;
+			width: 920px;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 20px;
+			background-color: #F5F7F9;
+			border: 1px solid black;
+			padding: 0px;
+			position: relative;
+			font: normal normal 12px Verdana, Geneva, Arial, Helvetica, sans-serif;
+		}
+		
+		.divfixedHeader {
+			height: 65px;
+			width: 920px;
+			color: #306;
+			background-color: #F5F7F9;
+			overflow: hidden;
+			float: left;
+			font-weight: bold;
+		}
+		
+		.scrollContent {
+			color: #000000;
+			background-color: #FFFFFF;
+			position: relative;
+			overflow: hidden;
+			width: 870px;	
+			-moz-user-select: none;
+			-khtml-user-select: none;
+			user-select: none;
+			cursor:pointer;
+			margin-left:20px;
+			border-left: 1px solid black;
+			margin-left: 20px;
+			z-index:10;
+		}
+		
+		.Pending {
+			background-color: rgba(240,237,69,0.6);
+		}
+		
+		.Allocated {
+			background-color: rgba(162,205,90,0.6);
+		}
+		
+		.scrollContentDeclined {
+			background-color: rgba(153,204,255,0.6);
+		}
+		
+		.Failed {
+			background-color: rgba(255,106,106,0.6);
+		}
+				
+		.header {
+			float: left;
+			position: relative;
+			margin:left: auto;
+			margin-right: auto;
+			padding: 24px 1px 24px 1px;
+		}
+		
+		.round {
+			width: 51px;
+			float: left;
+			text-align: center;
+			padding: 24px 1px 24px 1px;
+			border-bottom: 1px solid #306;	
+			height: 40px;
+			margin-left: 20px;
+		}
+		
+		.roundcontent {
+			width: 51px;
+			float: left;
+			text-align: center;
+			padding: 20px 1px 24px 1px;
+			border-bottom: 1px solid #306;
+			border-top: 1px solid #306;			
+			height: 20px;
+		}
+		
+		.modcode {
+			width: 60px;
+			float: left;
+			text-align: center;
+			padding: 17px 1px 24px 1px;
+			border-bottom: 1px solid #306;
+			height: 40px;
+			margin-left: 18px;
+		}
+		
+		.modcodecontent {
+			width: 86px;
+			float: left;
+			text-align: center;
+			padding: 20px 1px 24px 1px;
+			border-bottom: 1px solid #306;
+			border-top: 1px solid #306;
+			height: 20px;
+		}
+		
+		.modtitle {
+			width: 155px;
+			float: left;
+			text-align: center;
+			padding: 24px 1px 24px 1px;
+			border-bottom: 1px solid #306;
+			height: 40px;
+			margin-left: 12px;
+		}
+		
+		.modtitlecontent {
+			width: 162px;
+			float: left;
+			text-align: center;
+			padding: 20px 1px 24px 1px;
+			border-bottom: 1px solid #306;
+			border-top: 1px solid #306;
+			height: 20px;
+		}
+		
+		.day {
+			width: 101px;
+			float: left;
+			text-align: center;
+			padding: 24px 1px 24px 1px;
+			border-bottom: 1px solid #306;
+			height: 40px;
+			margin-left: 2px;
+		}
+		
+		.daycontent {
+			width: 101px;
+			float: left;
+			text-align: center;
+			padding: 20px 1px 24px 1px;
+			border-bottom: 1px solid #306;
+			border-top: 1px solid #306;
+			height: 20px;
+		}
+		
+		.time {
+			width: 61px;
+			float: left;
+			text-align: center;
+			padding: 24px 1px 24px 1px;
+			border-bottom: 1px solid #306;
+			height: 40px;
+			margin-left: 2px;
+		}
+		
+		.timecontent {
+			width: 61px;
+			float: left;
+			text-align: center;
+			padding: 20px 1px 24px 1px;
+			border-bottom: 1px solid #306;
+			border-top: 1px solid #306;
+			height: 20px;
+		}
+		
+		.length {
+			width: 61px;
+			float: left;
+			text-align: center;
+			padding: 24px 1px 24px 1px;
+			border-bottom: 1px solid #306;
+			height: 40px;
+		}
+		
+		.lengthcontent {
+			width: 57px;
+			float: left;
+			text-align: center;
+			padding: 20px 1px 24px 1px;
+			border-bottom: 1px solid #306;
+			border-top: 1px solid #306;
+			height: 20px;
+		}
+		
+		.numstudents {
+			width: 80px;
+			float: left;
+			text-align: center;
+			padding: 15px 1px 24px 1px;
+			border-bottom: 1px solid #306;
+			height: 40px;
+		}
+		
+		.numstudentscontent {
+			width: 84px;
+			float: left;
+			text-align: center;
+			padding: 20px 1px 24px 1px;
+			border-bottom: 1px solid #306;
+			border-top: 1px solid #306;
+			height: 20px;
+		}
+		
+		.numrooms {
+			width: 60px;
+			float: left;
+			text-align: center;
+			padding: 15px 1px 24px 1px;
+			height: 40px;
+		}
+		
+		.numroomscontent {
+			width: 60px;
+			float: left;
+			text-align: center;
+			padding: 20px 1px 24px 1px;
+			border-bottom: 1px solid #306;
+			border-top: 1px solid #306;
+			height: 20px;
+		}
+		
+		.roompreference {
+			width: 89px;
+			float: left;
+			text-align: center;
+			padding: 15px 1px 24px 1px;
+			height: 40px;
+		}
+		
+		.roompreferencecontent {
+			width: 89px;
+			float: left;
+			text-align: center;
+			padding: 20px 1px 24px 1px;
+			border-bottom: 1px solid #306;
+			border-top: 1px solid #306;
+			height: 20px;
+		}
+		
+		.roomallocation {
+			width: 89px;
+			float: left;
+			text-align: center;
+			padding: 15px 1px 24px 1px;
+			height: 40px;
+		}
+		
+		.roomallocationcontent {
+			width: 89px;
+			float: left;
+			text-align: center;
+			padding: 20px 1px 24px 1px;
+			border-bottom: 1px solid #306;
+			border-top: 1px solid #306;
+			height: 20px;
+		}
+		
+		#scrollablearea {
+			height: 925px;
+			width: 900px;
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
+		
+		.hidden {
+			display: none;	
+			-moz-user-select: none;
+			-khtml-user-select: none;
+			user-select: none;
+			cursor:default;
+			border-left: 1px solid black;
+			height:148px;
+			margin-left: 20px;
+		}
+		
+		form textarea {
+			height: 6em;
+			overflow-x: auto;
+			resize: none;
+		}
+		
+		.title {
+			text-align: center;
+			font-weight: bold;
+			text-decoration: underline;
+		}
+		
+		.info1 {
+			margin-left: 50px;
+			margin-right: auto;
+			width: 225px;
+			float: left;
+		}
+		
+		.info2 {
+			margin-left: 0px;
+			margin-right: auto;
+			width: 250px;
+			float: left;
+		}
+		
+		.info3 {
+			margin-left: 50px;
+			margin-right: auto;
+			width: 250px;
+			float: left;
+		}
+		
+		.normal{
+			display: inline;
+		}
+		
+		.facilities {
+			width: 250px;
+			margin-left:85px;
+			margin-right: auto;
+			margin-top: 10px;
+		}
+		
+		.requirementstextarea {
+			width: 50px;
+			margin-left: 20px;
+			margin-right: auto;
+		}
+		
+		.toolbar {
+			display: none;
+			width:125px;
+			height:25px;
+			z-index: 15;
+			position: absolute;
+			top: 0;
+			right:0;
+		}
+		
+		.editoverlay {
+			width: 500px;
+			height: 500px;
+			border: 1px solid black;
+			background-color: #FFFFFF;
+			position: absolute;
+			top: 0;
+			left: 0;
+		
+		}
+		
+		.edit_ul {
+			text-decoration: underline;
+		}
+		
+		.delete_ul {
+			text-decoration: underline;
+		}
+		
+		
+}

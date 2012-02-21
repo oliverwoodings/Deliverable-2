@@ -39,23 +39,53 @@
 			}
 			
 			$parent->title = "Login";
-			$parent->displayHeader();
 			
 			if ($alert) $parent->echoError($alert);
 			
 			?>
 			
-			<div class="loginForm">
-				<form action="index.php?page=login&get=auth" method="post">
-					<div class="username">Username: <input type="text" name="username" /></div>
-					<div class="password">Password: <input type="password" name="password" /></div>
-					<input id="submitButton" type="submit" value="Submit" />
-				</form>
-			</div>
+			<html>
+				<head>
+					<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+					<title>Loughborough University TimeTabling System</title>
+					<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+				
+					<!--<link rel="stylesheet" href="css/default.css" type="text/css" />-->
+					<link rel="stylesheet" href="css/custom-theme/jquery-ui-1.8.16.custom.css" type="text/css" />
+					
+					<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+					<script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
+					
+					<!-- per page -->
+					<link rel="stylesheet" href="css/pages/login.css" type="text/css" />
+					<script type="text/javascript" src="js/pages/login.js"></script>
+				</head>
+				
+				<body>
+					<a href="http://www.lboro.ac.uk"><img id="lboro_image" src="images/lulogo_204_52.jpg" alt="Loughborough University" width="204" height="52" /></a>
+					<div id="login_box">
+						<form id="login" action="index.php?page=login&get=auth" method="post">
+							<p id="logintitle"><h2>Timetabling System</h2></p>
+							<label>Username</label>
+							<div class="ui-widget" id="user_input">
+								<select id="user_combobox" name="username">
+									<?php
+										$departments = $parent->db->getDepartments();
+										foreach ($departments as $department) {
+											echo "<option>" . $department . "</option>";
+										}
+									?>
+								</select>
+							</div>
+							<label for="password">Password</label><br /><input id="password" name="password" type="password" class="ui-autocomplete-input"/><br/>
+							<input id="sub_login" type="submit" value="Log In"/>
+							<a href="#">Forgot your password?</a>
+						</form>
+					</div>
+				</body>
+			</html>
 			
 			<?php
-			
-			$parent->displayFooter();
 			
 		}
 		

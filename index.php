@@ -4,6 +4,8 @@
 	include("config.php");
 	include("cache.php");
 	include("db.php");
+	//Entities
+	foreach (glob("entities/*.php") as $filename) include $filename;
 	
 	//Start up sessions and initiate main class
 	session_start();
@@ -18,7 +20,7 @@
 		public $page;
 		public $cache;
 		public $get;
-		public $pages = array("home", "actionresult", "login", "modules", "request", "response");
+		public $pages = array("home", "actionresult", "login", "modules", "requests", "responses", "roomavailability");
 		public $title;
 		public $refresh = false;
 		
@@ -53,7 +55,7 @@
 			
 			//Format require information for template
 			$compiledTitle = $this->title . " | " . $this->config->general["titleSuffix"];
-			$userStatus = "Welcome, Guest. <a href='index.php?page=login'>Login</a>";
+			$userStatus = "<a href='index.php?page=login'>Guest (Login)</a>";
 			if ($this->auth->isLoggedIn())
 				$userStatus = '<a href="index.php?page=login&get=logout">Logout (' . $this->auth->getUsername() . ')</a>';
 				
@@ -64,11 +66,16 @@
 					<title><?php echo $compiledTitle; ?></title>
 					<meta http-equiv="PRAGMA" content="NO-CACHE">
                     <link rel="shortcut icon" href="images/favicon.ico" />
-					<link href="css/styles.css" rel="stylesheet" type="text/css" />
+                    <link href="css/datatables.css" rel="stylesheet" type="text/css" />
                     <link rel="stylesheet" type="text/css" href="css/custom-theme/jquery-ui-1.8.16.custom.css" />
+					<link rel="stylesheet" href="js/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
+					<link href="css/styles.css" rel="stylesheet" type="text/css" />
                     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
                     <script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
         			<script type="text/javascript" src="js/jquery.tools.min.js"></script>
+					<script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+					<script type="text/javascript" src="js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+					<script type="text/javascript" src="js/combobox.js"></script>
         			<script type="text/javascript" src="js/scripts.js"></script>
 					<?php 
 						if (file_exists("css/pages/" . $this->page . ".css")) echo '<link rel="stylesheet" type="text/css" href="css/pages/' . $this->page . '.css" />';
@@ -151,10 +158,15 @@
 								</div>
 								
 								<!-- Round Indicator -->
-								<div id="ri" class="roundInd" title="Round 1"><h3>1</h3></div> 
+								<div id="ri" class="roundInd"><h3>1</h3></div> 
+								<div class="tooltip">
+									<div><h1>Round 1</h1></div>
+									<div>Start Date: <span id="sdate">wegew</span> </div>
+									<div>End Date: <span id="edate">wrgwe</span> </div>
+								</div>
 				                
 				                <!-- Logout Button -->
-				                <div class="logout"><a href="index.php?page=login&get=logout">Logout (Computer Science) </a></div>
+				                <div class="logout"><a href="index.php?page=login&get=logout"><?php echo $userStatus; ?> </a></div>
 				            </div>
 				            
 

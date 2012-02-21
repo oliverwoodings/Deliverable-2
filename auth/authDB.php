@@ -4,9 +4,12 @@
 		
 		private $parent;
 		private $username;
+		private $id;
 		
 		function __construct($parent) {
 			$this->parent = $parent;
+			if (isset($_SESSION["team03TimetableUsername"]))
+				$this->username = $_SESSION["team03TimetableUsername"];
 		}
 		
 		//If user is not logged in, redirect to the login page
@@ -20,14 +23,15 @@
 		
 		//Check if user is logged in or not
 		function isLoggedIn() {
-			if (isset($_SESSION["team03LoggedIn"])) return true;
+			if (isset($_SESSION["team03TimetableLoggedIn"])) return true;
 			return false;
 		}
 		
 		//Attempt to log user in with name and password
 		function loginUser($username, $password) {
 			if ($this->parent->db->checkLoginDetails($username, $password)) {
-				$_SESSION["team03LoggedIn"] = true;
+				$_SESSION["team03TimetableLoggedIn"] = true;
+				$_SESSION["team03TimetableUsername"] = $username;
 				$this->username = $username;
 				return true;
 			}
@@ -36,13 +40,22 @@
 		
 		//Attempt to log out user
 		function logoutUser() {
-			unset($_SESSION["team03LoggedIn"]);
+			unset($_SESSION["team03TimetableLoggedIn"]);
 		}
 		
 		//Retrieve username
 		function getUsername() {
 			if (!$this->isLoggedIn()) return "Guest";
 			return $this->username;
+		}
+		
+		//Retrieve user id
+		function getUserId() {
+			if (!$this->isLoggedIn()) return "0";
+			if (strlen($this->id) == 0) {
+				$this->id = $this->parent->db->getDepartmentByName($this->username)->getId();
+			}
+			return $this->id;
 		}
 		
 	}

@@ -1,0 +1,75 @@
+#addModuleOverlay, #editModuleOverlay {
+	width: 300px;
+}
+
+.moduleSelected td {
+	background-color: #BCADCA !important;
+}
+
+#module_actions{
+	margin-bottom:10px;
+}
+
+#module_actions .module_action{
+	margin-right:5px;
+}
+
+#modules tr {
+    cursor: pointer;
+}
+
+.ui-button { margin-left: -1px; }
+.ui-button-icon-only .ui-button-text { padding: 0.35em; } 
+.ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }
+
+#module_input_area{
+	width:300px;
+	padding:0px 10px 0px 10px;
+}
+
+#module_input_area label{
+	margin-right:10px;
+	float:left;
+}
+
+#module_input_area .option{
+	width:300px;
+	margin-bottom:5px;
+	position:relative;
+	float:left;
+}
+#module_input_area .option input{
+	float:left;
+}
+
+#buttons{
+	float:left;
+	margin-left:90px;
+}
+.lecturers{
+	width:200px;
+	margin-left:77px;
+}
+#remove_l{
+	margin-left:10px;
+}
+#sub_editmodule, #sub_addmodule {
+	float:left;
+	margin-left:90px;
+}
+
+#confirm{
+	display:inline-block;
+	margin:0px 5px 0px 0px;
+}
+#confirm a{
+	cursor: pointer;
+	text-decoration: none;
+}
+#confirm a:hover{
+	color:#CC0066; 
+}
+
+.option {
+	margin-bottom: 5px;
+}

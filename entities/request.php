@@ -14,7 +14,6 @@
 		protected $day = 0;
 		protected $weeks = array();
 		protected $length = 0;
-		protected $period = 0;
 		protected $numStudents = 0;
 		protected $priority = false;
 		protected $specReq = "";

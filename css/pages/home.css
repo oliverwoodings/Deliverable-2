@@ -63,7 +63,7 @@
 /* ========== */
 #left_side{
 	float:left;
-	margin-left: 40px;
+	margin-left: 20px;
 }
 #right_side{
 	float:left;
@@ -155,7 +155,3 @@
 .tableHighlight {
 	background-color: #A2A4FF !important;
 }
-
-/* ======== */
-/* Tool Tip */
-/* ======== */

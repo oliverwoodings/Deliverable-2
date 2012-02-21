@@ -1,20 +1,113 @@
-/* LOGIN DIV */
-.loginForm {
-	width: 250px;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 20px;
+/* LOGIN CSS */
+
+/*jquery combobox's --- Duplicated from request.css :s*/
+.ui-button { margin-left: -1px; }
+.ui-button-icon-only .ui-button-text { padding: 0.35em; } 
+.ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }
+
+input, textarea {  
+    padding: 6px;  
+    border: solid 1px #CCC;
+    outline: 0;  
+    font: normal 13px/100% Verdana, Tahoma, sans-serif;
+    background: #FFFFFF;
+	border-radius: 5px 5px 5px 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	margin: 2px;
+}
+    input:focus {  
+        -webkit-box-shadow: 0px 0px 5px #74ABE9;
+        -moz-box-shadow: 0px 0px 5px #74ABE9;
+        box-shadow: 0px 0px 5px #74ABE9;
+    }
+	
+#user_input {
+	height: 60px;
+}
+#user_input input {
+	height: 50px;
+	width: 217px;
+	border-radius: 5px 0px 0px 5px;
+}
+#user_input button {
+	height: 50px;
+	margin-left: -6px;
 }
 
-/* LOGIN FIELDS */
-.username {
+
+#login_box{
+	width:300px;
+	height:250px;
+	//border: 2px solid #330066;
+	border: 1px solid #e1d0e8;
+	margin:auto;
+	padding:20px;
+	//margin-top:100px;
+	//border-radius:8px;
+	background-color:#f1eaf8;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 0.8em;
+	color: #333333;
+	/*-moz-box-shadow: 0 0 5px 5px #888;
+	-webkit-box-shadow: 0 0 5px 5px#888;
+	box-shadow: 0 0 5px 5px #888;*/
+}
+#login{
+
+}
+#login p {
 	
 }
-.password {
-	margin-top: 10px;
-	margin-left: 3px;
+#login label {
+	margin:5px;
 }
-#submitButton {
-	margin-left: 70px;
-	margin-top: 20px;
+#login input {
+	margin:5px;
 }
+
+#login #logintitle{
+	margin-left:200px;
+}
+
+#login a{
+	color:inherit;
+	text-decoration:none;
+}
+
+#login a:hover{ 
+	color:#CC0066; text-decoration:underline; 
+}
+
+
+#lboro_image{
+	display:block;
+	margin:auto;
+	position:relative;
+	left:60px;
+	margin-top:100px;
+	padding-bottom:10px;
+}
+
+#login_box #name{
+	//border-radius:5px;
+	width:250px;
+	margin:5px;
+	font-size:20px;
+}
+#login_box #password{
+	width:250px;
+	margin:5px;
+	font-size:20px;
+	height: 50px;
+}
+
+#login #sub_login{
+	width:100px;
+	height:30px;
+}
+
+/*jquery combobox's */
+.ui-button { margin-left: -1px; }
+.ui-button-icon-only .ui-button-text { padding: 0.35em; } 
+.ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }

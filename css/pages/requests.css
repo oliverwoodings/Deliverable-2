@@ -1,0 +1,477 @@
+/* 
+ * Requests Page css
+ */
+
+/*jquery combobox's */
+.ui-button { margin-left: -1px; }
+.ui-button-icon-only .ui-button-text { padding: 0.35em; } 
+.ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }
+
+.req_label{
+	font-size:18px;
+	float:left;
+	margin-right:5px;
+}
+.mand{
+	background: #FFDBDB;
+}
+.completed{
+	background: #D7F5DB;
+}
+/* Row1 and associated fields */
+#row1
+{
+	width:920px;
+	float:left;
+	padding:5px 0px 5px 0px;
+}
+
+#row1 #module_sect
+{
+	padding:5px 0px 5px 5px;
+	margin:0px;
+	width:435px;
+	float:left;
+}
+
+.req_input{
+	height:30px;
+	background-color:white;
+}
+
+.req_input:hover{
+	//border: 1px solid #F7CBDD;
+	background-color: #F7E1EA;
+	border:1px solid grey;
+}
+
+#module_input{
+	width:200px;
+	float:left;
+	border:1px solid grey;
+	line-height:22px;
+	text-align:left;
+	margin:0px 0px 0px 5px;
+	padding-left:3px;
+	padding-top:3px;
+	height: 25px;
+	display:block;
+}
+#mod_expand{
+	display:none;
+	width:300px;
+	height:100px;
+	background-color:white;;
+	margin-top:45px;
+	overflow:auto;
+	//border:1px solid #111;
+}
+
+#mod_expand .mod_elm{
+	width:275px;
+	height:20px;
+	padding:2px 2px 2px 5px;
+	color:grey;
+	border-bottom:1px solid #111;
+}
+#mod_expand .mod_elm:hover{
+	background-color:#F7E1EA;
+	color:#111;
+	cursor:pointer;
+}
+#mod_expand .mod_elm p{
+	padding:0px;
+	margin:0px;
+	overflow:hidden;
+}
+
+#row1 #noStudents_sect
+{
+	padding:5px 0px 5px 5px;
+	margin:0px;
+	width:345px;
+	float:left;
+}
+
+#noStud_input{
+	width:50px;
+}
+
+#row1 #priority_sect
+{
+	padding:5px 0px 5px 5px;
+	margin:0px;
+	width:115px;
+	float:left;
+}
+
+#priority_check{
+	float:left;
+}
+
+/* Row2 and associated fields */
+#row2
+{
+	width:920px;
+	height:150px;
+	float:left;
+}
+
+#row2 #facilities_sect
+{
+	padding:0px 0px 0px 5px;
+	margin:0px;
+	width:455px;
+	float:left;
+}
+
+#fac_area{
+	width:300px;
+	/*border: 1px solid grey;*/
+	height:100px;
+	margin-top:5px;
+}
+
+#fac_expand{
+	display:block;
+}
+.fac_option{
+	float:left;
+	width:140px;
+	position:relative;
+	display:block;
+	text-align:left;
+	margin:5px;
+}
+.fac_option input{
+	position:relative;
+	float:right;
+}
+
+#fac_done{
+	//display:none;
+}
+#fac_edit{
+	display:none;
+}
+#fac_details{
+	display:none;
+}
+
+
+#row2 #special_sect
+{
+	padding:0px;
+	margin:0px;
+	width:460px;
+	float:left;
+}
+
+#spec_input{
+	font-family:inherit;
+	resize:none;
+	width:400px;
+}
+
+/* Row3 and associated fields */
+#row3
+{
+	width:920px;
+	float:left;
+}
+
+#row3 #parkrtype_sect
+{
+	padding:5px 0px 5px 0px;
+	margin:0px;
+	width:920px;
+	height:40px;
+	float:left;
+}
+
+#row3 #parkrtype_sect #park_sect
+{
+	padding:0px 0px 0px 5px;
+	margin:0px;
+	width:455px;
+	float:left;
+}
+#row3 #parkrtype_sect #roomty_sect
+{
+	padding:0px 0px 0px 5px;
+	margin:0px;
+	width:455px;
+	float:left;
+}
+
+#row3 #roomprefno_sect
+{
+	margin:0px;
+	width:920px;
+	height:40px;
+	float:left;
+}
+
+#row3 #roomprefno_sect #roompref_sect
+{
+	padding:5px 0px 5px 5px;
+	margin:0px;
+	width:455px;
+	float:left;
+}
+
+#row3 #roomprefno_sect #noRooms_sect
+{
+	padding:5px 0px 5px 5px;
+	margin:0px;
+	width:455px;
+	float:left;
+}
+
+#roompref_expand{
+	height:320px;
+	width:800px;
+	float:left;
+	margin-bottom:10px;
+	display:none;
+}
+
+#search_area{
+	width:900px;
+	float:left;
+	margin-bottom:5px;
+}
+
+#roompref_input{
+	width:200px;
+	float:left;
+	border:1px solid grey;
+	line-height:22px;
+	text-align:left;
+	margin:0px 0px 0px 5px;
+	padding-left:3px;
+	padding-top:3px;
+	height: 25px;
+	display:block;
+}
+#adv_search{
+	margin-left:10px;
+}
+
+.resultsHighlighted {
+	background-color: #F4F0EF !important;
+}
+
+.resultsContainer {
+    height: 250px;
+    overflow: auto;
+    width: 800px;
+}
+.resultsTable {
+    font-size: 16px;
+    font-weight: bold;
+    font-style: normal;
+	border-collapse: collapse;
+}
+
+.resultsTable th {
+	padding: 5px;
+	background: #f5f7f9;
+	font-size: 14px;
+	color: #306;
+	border-bottom:1px solid black;
+}
+.resultsTable td {
+	text-align: center;
+	color: #666;
+	text-shadow: 1px 1px 1px #fff;
+	font-size: 13px;
+	font-weight: 400;
+	text-overflow: ellipsis;
+	cursor: pointer;
+}
+
+#even{
+	background: #e1dae8;
+}
+
+/* Row4 and associated fields */
+#row4
+{
+	width:920px;
+	height:350px;
+	float:left;
+}
+
+#row4 #length_sect
+{
+	padding:5px 0px 5px 5px;
+	margin:0px;
+	width:915px;
+	float:left;
+}
+
+#row4 #daytime_sect
+{
+	padding:0px;
+	margin:5px 0px 0px 0px;
+	width:920px;
+	float:left;
+}
+
+/* Row5 and associated fields */
+#row5
+{
+	width:920px;
+	height:60px;
+	float:left;
+}
+#weeks_sect{
+	padding:5px 0px 5px 5px;
+}
+#week_boxes li{
+	display: inline;
+	list-style-type: none;
+	padding-right: 10px;
+}
+
+#submit_sect{
+	width:920px;
+	height:50px;
+	float:left;
+	padding:5px 0px 0px 0px;
+}
+#subwrap{
+	margin-left:auto;
+	margin-right:auto;
+	width:200px;
+}
+#submit{
+	width:200px;
+	height:50px;
+}
+
+/* TOKENIZER */
+.tag{
+	display:inline-block;
+	border:1px solid #e1dae8;
+	background-color:#f1eaf8;
+	border-radius:8px;
+	padding:5px;
+	/*margin:0px;*/
+	margin-right:3px;
+	padding-right:10px;
+	cursor:pointer;
+	width:250px; /*only for fac*/
+	margin-bottom:3px; /*only for fac*/
+}
+.tag:hover{
+	border:1px solid #d0c9d7;
+	background-color: #e0d9e7;
+}
+.deletebutton {
+	position: relative;
+	display:inline-block;
+	float:right;
+	right:-6px;
+	top:5px; /* -1 when not float right */
+	width: 7px;
+	height: 7px;
+	font-size: 1px;
+ 	background: url('../../images/close.gif'); 
+}
+.deletebutton:hover{ 
+	border: none; 
+	background-position: 7px; 
+	text-decoration: none; 
+}
+
+
+.tableCell_blue {
+    background: rgba(162,205,90,0.6);
+}
+.tableCell_normal {
+	background: #333;
+}
+.tableCell_yellow {
+	background: rgba(255, 255, 102, 0.6);
+}
+.tableCell_yellow:hover, .tableCell_blue:hover  {
+    cursor: pointer;
+    opacity: 0.7;
+}
+.tableCell_red {
+	background: rgba(255, 106, 106, 0.6);
+}
+
+.td_content {
+	font-size: 10px;
+    margin: 3px;
+    height: 41px;
+    text-align: center;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border: 1px solid #ddd;
+    line-height: 17px;
+    opacity: 1;
+}
+.td_content a {
+    text-decoration: none;
+    color: black;
+}
+
+.clickDiv {
+    width: 100%;
+    height: 100%;
+}
+
+#daytime_sel_table{
+    background: #f5f7f9;
+	width:100%;
+	border: 1px solid black;
+	border-collapse: collapse;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+#daytime_sel_table td{
+	border: 1px solid grey;
+    background: white;
+}
+
+#daytime_sel_table h1 {
+    font-size: 16px;
+    margin-top: 5px;
+    color: #CC0066;
+}
+
+#daytime_sel_table th{
+	color: black;
+    font-size: 14px;
+	color: #306;
+}
+
+#daytime_sel_table #days {
+	width:100px;
+}
+
+#daytime_sel_table #days th, td{
+	height:50px;
+}
+
+#daytime_sel_table td{
+	width:70px;
+	margin:0px;
+	padding:0px;
+}
+
+.hovertd{
+	background:rgba(162,205,90,0.6) !important;
+	opacity:0.7;
+}
+.selectedtd{
+	background:rgba(162,205,90,0.6) !important;
+}
+
+

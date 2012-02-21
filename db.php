@@ -13,17 +13,183 @@
 			$this->createTables();
 		}
 		
+		/**
+		 * Delete a module by its code
+		 */
+		public function deleteModuleByCode($code) {
+			$sql = "DELETE FROM `module` WHERE LOWER(module_code) = LOWER('%s')";
+			$this->query($sql, $code);
+		}
 		
-		public function getRequestById($id) {
-			$sql = "SELECT * FROM request,module,department,park,building,status,round WHERE request.request_id = $id AND request.module_id = module.module_id AND department.department_id = module.department_id AND request.request_id = park.park_id AND request.building_id = building.building_id AND request.status_id = status.status_id AND request.round_id = round.round_id";
-			$res = $this->query($sql);
-			print_r($res);
+		/**
+		 * Save a module object
+		 */
+		public function saveModule($module) {
+			//If module doesn't exist in the database yet
+			if (strlen($module->getId()) < 1) {
+				$sql = "INSERT INTO `module` (module_name, module_code, department_id) VALUES ('%s', '%s', '%s')";
+				$this->query($sql, $module->getName(), $module->getCode(), $module->getDepartment()->getId());
+				$module->setId(mysql_insert_id());
+			} 
+			//Else remove update and remove lecturer links
+			else {
+				$sql = "DELETE FROM `module_lecturer` WHERE module_id = '%s'";
+				$this->query($sql, $module->getId());
+				$sql = "UPDATE `module` SET module_name = '%s', module_code = '%s', department_id = '%s' WHERE module_id = '%s'";
+				$this->query($sql, $module->getName(), $module->getCode(), $module->getDepartment()->getId(), $module->getId());
+			}
+			
+			//Re-add updated lecturer links
+			foreach ($module->getLecturers() as $lecturer) {
+				$sql = "INSERT INTO `module_lecturer` (module_id, lecturer_id) VALUES('%s', '%s')";
+				$this->query($sql, $module->getId(), $lecturer->getId());
+			}
+		}
+		
+		/**
+		 * Returns status by its name
+		 */
+		public function getStatusByName($name) {
+			$res = $this->query("SELECT * FROM `status` WHERE `status_name` = '%s'", $name);
+			$row = mysql_fetch_assoc($res);
+			if ($row == false) return false;
+			return new Entity($row["status_id"], $row["status_name"]);
+		}
+        
+        /**
+         * Gets a module by its code
+         */
+        public function getModuleByCode($code) {
+            $res = $this->query("SELECT * FROM `module` WHERE `module_code` = '%s'", $code);
+            $row = mysql_fetch_assoc($res);
+            if ($row == false) return false;
+            return new Module($row["module_id"], $row["module_name"], $this->getDepartmentById($row["department_id"]), $row["module_code"], $this->getLecturersByModuleId($row["module_id"]));
+        }
+        
+        /**
+         * Gets a module by its id
+         */
+        public function getModuleById($id) {
+            $res = $this->query("SELECT * FROM `module` WHERE `module_id` = '%s'", $id);
+            $row = mysql_fetch_assoc($res);
+            if ($row == false) return false;
+            return new Module($row["module_id"], $row["module_name"], $this->getDepartmentById($row["department_id"]), $row["module_code"], $this->getLecturersByModuleId($row["module_id"]));
+        }
+		
+        /**
+         * Returns a list of all modules
+         */
+		public function getModules() {
+			$res = $this->query("SELECT * FROM `module`");
+			$modules = array();
+			while($row = mysql_fetch_assoc($res)) {
+				$module = new Module($row["module_id"], $row["module_name"], $this->getDepartmentById($row["department_id"]), $row["module_code"], $this->getLecturersByModuleId($row["module_id"]));
+				array_push($modules, $module);
+			}
+			return $modules;
+		}
+		
+        /**
+         * Gets a list of all lecturers assigned to a module
+         */
+		public function getLecturersByModuleId($id) {
+			$res = $this->query("SELECT * FROM `lecturer` WHERE `lecturer_id` IN (SELECT `lecturer_id` FROM `module_lecturer` WHERE module_id = '%s')", $id);
+            $lecturers = array();
+            while ($row = mysql_fetch_assoc($res)) {
+                $lecturer = new Entity($row["lecturer_id"], $row["lecturer_name"]);
+                array_push($lecturers, $lecturer);
+            }
+            return $lecturers;
+		}
+        
+        /**
+         * Returns a list of lecturers
+         */
+        public function getLecturers() {
+        	$res = $this->query("SELECT * FROM `lecturer`");
+            $lecturers = array();
+            while ($row = mysql_fetch_assoc($res)) {
+                $lecturer = new Entity($row["lecturer_id"], $row["lecturer_name"]);
+                array_push($lecturers, $lecturer);
+            }
+            return $lecturers;
+        }
+        
+        /**
+         * Returns a single lecturer
+         */
+        public function getLecturerById($id) {
+			$res = $this->query("SELECT * FROM `lecturer` WHERE lecturer_id = '%s'", $id);
+            $row = mysql_fetch_assoc($res);
+            if ($row == false) return false;
+            return new Entity($row["lecturer_id"], $row["lecturer_name"]);
+		}
+        
+        /**
+         * Returns a single department
+         */
+		public function getDepartmentById($id) {
+			$res = $this->query("SELECT * FROM `department` WHERE department_id = '%s'", $id);
+            $row = mysql_fetch_assoc($res);
+            if ($row == false) return false;
+            return new Entity($row["department_id"], $row["department_name"]);
+		}
+		
+        /**
+         * Returns a single department
+         */
+		public function getDepartmentByName($name) {
+			$res = $this->query("SELECT * FROM `department` WHERE LOWER(department_name) = LOWER('%s')", $name);
+            $row = mysql_fetch_assoc($res);
+            if ($row == false) return false;
+            return new Entity($row["department_id"], $row["department_name"]);
+		}
+        
+        /**
+		 * Returns list of department names
+		 */
+		public function getDepartments() {
+			$res = $this->query("SELECT department_name FROM `department`");
+			$departments = array();
+			while ($row = mysql_fetch_assoc($res)) {
+				array_push($departments, $row["department_name"]);
+			}
+			return $departments;
+		}
+		
+		/**
+		 * Returns entity list of parks
+		 */  
+		public function getRoomTypes() {
+			$res = $this->query("SELECT * FROM `room_type`");
+			$types = array();
+			while($row = mysql_fetch_assoc($res)) {
+				$type = new Entity($row["type_id"], $row["type"]);
+				array_push($types, $type);
+			}
+			return $types;
+		}
+		
+		/**
+		 * Returns entity list of parks
+		 */  
+		public function getParks() {
+			$res = $this->query("SELECT * FROM `park`");
+			$parks = array();
+			while($row = mysql_fetch_assoc($res)) {
+				$park = new Entity($row["park_id"], $row["park_name"]);
+				array_push($parks, $park);
+			}
+			return $parks;
 		}
 		
 		/**
 		 * Check login details
 		 */
 		public function checkLoginDetails($username, $password) {
+			$res = $this->query("SELECT * FROM `department` WHERE LOWER(department_name) = LOWER('%s')", $username);
+			$row = mysql_fetch_assoc($res);
+			if ($row == false || sha1($password) !== $row["password"]) return false;
 			return true;
 		}
 				
@@ -42,6 +208,7 @@
 			}
 			//Error handling
 			if (mysql_error() != "") die(mysql_error());
+			return $res;
 		}
 		
 		/**
@@ -62,6 +229,7 @@
 				CREATE TABLE IF NOT EXISTS `building` (
 				  `building_id` int(11) NOT NULL AUTO_INCREMENT,
 				  `building_name` varchar(50) NOT NULL UNIQUE,
+                  `building_code` varchar(10) NOT NULL UNIQUE,
 				  `park_id` int(11) NOT NULL,
 				  PRIMARY KEY (`building_id`)
 				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
@@ -70,6 +238,7 @@
 				CREATE TABLE IF NOT EXISTS `department` (
 				  `department_id` int(11) NOT NULL AUTO_INCREMENT,
 				  `department_name` varchar(70) NOT NULL UNIQUE,
+				  `password` varchar(150) NOT NULL,
 				  PRIMARY KEY (`department_id`)
 				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
 			
@@ -147,8 +316,8 @@
 				CREATE TABLE IF NOT EXISTS `room` (
 				  `room_id` int(11) NOT NULL AUTO_INCREMENT,
 				  `building_id` int(11) NOT NULL,
-				  `room_name` varchar(50) NOT NULL UNIQUE,
 				  `room_code` varchar(20) NOT NULL,
+                  `capacity` int(11) NOT NULL,
 				  PRIMARY KEY (`room_id`)
 				) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
 			

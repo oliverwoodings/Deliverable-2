@@ -1,0 +1,177 @@
+.tableCell_blue {
+    background: rgba(162,205,90,0.6);
+}
+.tableCell_normal {
+	background: #333;
+}
+.tableCell_yellow {
+	background: rgba(255, 255, 102, 0.6);
+}
+.tableCell_yellow:hover, .tableCell_blue:hover  {
+    cursor: pointer;
+    opacity: 0.7;
+}
+.tableCell_red {
+	background: rgba(255, 106, 106, 0.6);
+}
+
+.td_content {
+	font-size: 10px;
+    margin: 3px;
+    height: 41px;
+    text-align: center;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border: 1px solid #ddd;
+    line-height: 17px;
+    opacity: 1;
+}
+.td_content a {
+    text-decoration: none;
+    color: black;
+}
+
+.clickDiv {
+    width: 100%;
+    height: 100%;
+}
+
+#room_av{
+	width: 900px;
+	position:relative;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#room_av_table{
+    background: #f5f7f9;
+	width:100%;
+	border: 1px solid black;
+	border-collapse: collapse;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+#room_av_table td{
+	border: 1px solid grey;
+    background: white;
+}
+
+#room_av_table h1 {
+    font-size: 16px;
+    margin-top: 5px;
+    color: #CC0066;
+}
+
+#room_av_table th{
+	color: black;
+    font-size: 14px;
+	color: #306;
+}
+
+#room_av_table #days {
+	width:100px;
+}
+
+#room_av_table #days th, td{
+	height:50px;
+}
+
+#room_av_table td{
+	width:70px;
+	margin:0px;
+	padding:0px;
+}
+#search_area{
+	margin-bottom:20px;
+	width: 900px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: -20px;
+}
+
+#search_filters{
+	height:98px; /* lol */
+}
+#search_filters #left{
+	float:left;
+	width:400px;
+}
+#search_filters .option{
+	float:left;
+	margin-right:10px;
+}
+
+#search_filters #facilities{
+	float:left;
+	width:400px;
+	margin:0px;
+	margin-left: 40px;
+}
+
+#facilities .fac_option{
+	float:left;
+	width:155px;
+	position:relative;
+	display:block;
+	text-align:left;
+	margin:5px;
+}
+#facilities .fac_option input{
+	position:relative;
+	float:right;
+}
+
+.opt_h4{
+	margin:0px;
+	margin-left:5px;
+}
+
+
+#request_room_btn {
+    margin-top: 20px;
+}
+
+.ui-button { margin-left: -1px; }
+.ui-button-icon-only .ui-button-text { padding: 0.35em; } 
+.ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }
+
+
+
+.resultsHighlighted {
+	background-color: #F4F0EF !important;
+}
+
+.resultsContainer {
+    height: 250px;
+    overflow: auto;
+    width: 640px;
+}
+.resultsTable {
+    font-size: 16px;
+    font-weight: bold;
+    font-style: normal;
+	border-collapse: collapse;
+}
+
+	.resultsTable th {
+		padding: 5px;
+		background: #306;
+ 		font-size: 14px;
+		color: #FFFFFF;
+	}
+	.resultsTable td {
+		text-align: center;
+
+		color: #666;
+		text-shadow: 1px 1px 1px #fff;
+		font-size: 13px;
+		font-weight: 400;
+		text-overflow: ellipsis;
+		cursor: pointer;
+	}
+	
+	#even{
+		background: #e1dae8;
+	}
