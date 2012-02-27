@@ -112,8 +112,20 @@
 			$parent->displayHeader();
 			
 			?>
-
+			<ul id="rounds">
+			<?php
+				$allRounds = $parent->db->getRounds();
+				$sem = $parent->auth->getUserSemester();// 1 or 2
+				$rounds = array();
+				foreach($allRounds  as $round){
+					if($round->getSemester() == $sem) $rounds[] = $round;
+				}
+				foreach($rounds as $round){
+				echo "<li>".$round->getName()."<input type='radio' name='round' id='".$round->getId()."_round' /></li>";
+				}
 			
+			?>
+			</ul>
 			
 			<!--Div which Displays Next Round-->
 			<div id="round_display">
