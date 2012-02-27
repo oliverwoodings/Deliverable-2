@@ -1,5 +1,12 @@
 <?php
 
+	/**
+	 *	File: entities/room.php
+	 *	Class: Room
+	 *  Author: Oliver Woodings
+	 *  Functionality: Abstracts the Room entity from the database
+	 */
+
 	class Room {
 		
 		private $id;

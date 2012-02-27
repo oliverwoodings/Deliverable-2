@@ -1,8 +1,11 @@
 <?php
     
-    /**
-     * Represents a module entry in the database
-     */
+	/**
+	 *	File: entities/module.php
+	 *	Class: Module
+	 *  Author: Oliver Woodings
+	 *  Functionality: Abstracts the Module entity from the database
+	 */
 	class Module {
 		
 		private $id;

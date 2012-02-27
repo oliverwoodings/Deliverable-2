@@ -1,5 +1,12 @@
 <?php 
 
+	/**
+	 *	File: entities/adminPage.php
+	 *	Page: Admin
+	 *  Author: Jono Brogan and Matthew Swift
+	 *  Functionality: Basic script to simulate the function of central admin
+	 */
+
 	class admin {
 		
 		function run($parent) {
@@ -105,6 +112,7 @@
 						break;
 				case "updaternd":
 						if(isset($_GET['id'])){
+							$parent->db->addHistory("Round Begins", "Round " . $parent->db->getRoundById($_GET["id"])->getName() . ", Semester " . $parent->db->getRoundById($_GET["id"])->getSemester());
 							$allRounds = $parent->db->getRounds();
 							$sem = $parent->auth->getUserSemester();
 							$rounds = array();
@@ -117,6 +125,7 @@
 								}else{ $round->setActive(false); }
 							}
 							$parent->db->saveRoundStatuses($rounds);
+							
 						}else{
 							header("HTTP/1.0 500 Internal Server Error");
         					header('Content-Type: application/json');

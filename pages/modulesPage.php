@@ -1,5 +1,12 @@
 <?php 
 
+	/**
+	 *	File: entities/modulesPage.php
+	 *	Page: Modules
+	 *  Author: Oliver Woodings and Alex Shea
+	 *  Functionality: Allows the user to add/remove modules and assign lecturers
+	 */
+
 	class modules {
 		
 		function run($parent) {

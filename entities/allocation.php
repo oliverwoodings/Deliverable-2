@@ -1,5 +1,12 @@
 <?php
 
+	/**
+	 *	File: entities/allocation.php
+	 *	Class: Allocation
+	 *  Author: Oliver Woodings
+	 *  Functionality: Abstracts the Allocation entity from the database
+	 */
+	 
 	class Allocation {
 		
 		private $request;

@@ -1,3 +1,10 @@
+/**
+ *	File: js/pages/login.js
+ *  Author: Jono Brogan
+ *  For: Login page
+ */
+
+
 $(document).ready(function(){
 	$( "#sub_login").button();
 	

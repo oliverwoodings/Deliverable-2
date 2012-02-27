@@ -1,3 +1,10 @@
+/**
+ *	File: css/pages/modules.css
+ *  Author: Oliver Woodings
+ *  For: Modules page
+ */
+
+
 #addModuleOverlay, #editModuleOverlay {
 	width: 300px;
 }

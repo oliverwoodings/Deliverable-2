@@ -1,5 +1,12 @@
 <?php 
 
+	/**
+	 *	File: entities/requestsPage.php
+	 *	Page: Requests
+	 *  Author: Oliver Woodings and Jono Brogan
+	 *  Functionality: Allows the user to add room requests to the database
+	 */
+
 	class requests {
 		
 		function run($parent) {

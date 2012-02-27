@@ -1,5 +1,12 @@
 <?php
 
+	/**
+	 *	File: entities/building.php
+	 *	Class: Building
+	 *  Author: Oliver Woodings
+	 *  Functionality: Abstracts the Building entity from the database
+	 */
+
 	class Building {
 		
 		private $id;
@@ -27,6 +34,7 @@
 			return $this->name;
 		}
         
+		//Returns building as an associative array
         public function getAsArray() {
             return array("id" => $this->id, "name" => $this->name, "park" => get_object_vars($this->park), "code" => $this->code);
         }

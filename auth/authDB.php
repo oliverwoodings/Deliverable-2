@@ -1,4 +1,11 @@
 <?php
+
+	/**
+	 *	File: auth/authDb.php
+	 *	Class: Auth
+	 *  Author: Oliver Woodings
+	 *  Functionality: Provides authorisation to the website framework
+	 */
 	
 	class Auth {
 		

@@ -1,5 +1,12 @@
 <?php 
 
+	/**
+	 *	File: entities/loginPage.php
+	 *	Page: Login
+	 *  Author: Oliver Woodings and Jono Brogan
+	 *  Functionality: Allows the user to login to the system
+	 */
+
 	class login {
 		
 		function run($parent) {

@@ -1,5 +1,12 @@
 <?php 
 
+	/**
+	 *	File: entities/roomavailabilityPage.php
+	 *	Page: Room Availability
+	 *  Author: Jono Brogan and Oliver Woodings
+	 *  Functionality: Lets the user visually find a room to make a request with
+	 */
+
 	class roomavailability {
 		
 		function run($parent) {

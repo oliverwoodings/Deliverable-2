@@ -1,3 +1,9 @@
+/**
+ *	File: js/pages/rooomavailability.js
+ *  Author: Jono Brogan, Alex Shea and Oliver Woodings
+ *  For: Room availability
+ */
+
 var tabState = 0;
 var day;
 var period;

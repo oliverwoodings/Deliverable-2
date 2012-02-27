@@ -1,5 +1,12 @@
 <?php
 
+	/**
+	 *	File: entities/entity.php
+	 *	Class: Entity
+	 *  Author: Oliver Woodings
+	 *  Functionality: Abstracts a two-field entity from the database e.g. Park
+	 */
+
 	class Entity {
 		
 		public $id;

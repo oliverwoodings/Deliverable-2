@@ -1,3 +1,11 @@
+/**
+ *	File: js/pages/admin.js
+ *  Author: Jono Brogan and Matthew Swift
+ *  For: Admin page
+ */
+
+
+
 $(document).ready(function() {
 
 	//Finds the number of rows in the table.

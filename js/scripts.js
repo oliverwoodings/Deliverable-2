@@ -1,3 +1,9 @@
+/**
+ *	File: js/scripts.js
+ *  Author: Oliver Woodings
+ *  About: Global javascript file - contains utility functions and some code for the header
+ */
+
 var pageArgs = { };
 
 $(document).ready(function() {

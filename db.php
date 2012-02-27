@@ -1,6 +1,12 @@
 <?php
 
-	//Database class
+	/**
+	 *	File: db.php
+	 *  Author: Oliver Woodings
+	 *  Functionality: Provides an interface with the database for other classes to interact with. 
+	 *           Centralises all SQL into one class instead of being spread across multiple pages.
+	 */
+	 
 	class Db {
 		
 		private $config;

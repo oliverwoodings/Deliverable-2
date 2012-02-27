@@ -1,5 +1,10 @@
 <?php
-
+	/**
+	 *	File: entities/request.php
+	 *	Class: Request
+	 *  Author: Oliver Woodings
+	 *  Functionality: Abstracts the Request entity from the database
+	 */
 	class Request {
 		
 		protected $id;

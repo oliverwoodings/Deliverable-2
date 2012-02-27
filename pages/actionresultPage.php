@@ -1,5 +1,12 @@
 <?php
 
+	/**
+	 *	File: entities/actionresultPage.php
+	 *	Page: Action Result
+	 *  Author: Oliver Woodings
+	 *  Functionality: Displays a message to the user as a result of one of their actions
+	 */
+
 	class actionresult {
 		
 		function run($parent) {

@@ -1,3 +1,10 @@
+/**
+ *	File: js/pages/home.js
+ *  Author: Oliver Woodings
+ *  For: Home page
+ */
+
+
 $(document).ready(function() {
 	$(".round").tooltip({ offset: [50, -80], relative: true });
 	

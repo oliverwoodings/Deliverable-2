@@ -1,5 +1,11 @@
 <?php
 
+	/**
+	 *	File: index.php
+	 *  Author: Oliver Woodings
+	 *  Functionality: Single point of entry for the website. Everything initiates from this class
+	 */
+
 	//Includes
 	include("config.php");
 	include("db.php");

@@ -1,5 +1,12 @@
 <?php
 	
+	/**
+	 *	File: auth/authAll.php
+	 *	Class: Auth
+	 *  Author: Oliver Woodings
+	 *  Functionality: Provides an abstract interface for user authorisaton
+	 */
+	
 	class Auth {
 		
 		private $parent;

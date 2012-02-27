@@ -1,5 +1,12 @@
 <?php
 
+	/**
+	 *	File: entities/round.php
+	 *	Class: Round
+	 *  Author: Oliver Woodings
+	 *  Functionality: Abstracts the Round entity from the database
+	 */
+
 	class Round {
 		
 		private $id;

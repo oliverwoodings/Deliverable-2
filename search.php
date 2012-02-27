@@ -1,5 +1,11 @@
 <?php
 
+	/**
+	 *	File: search.php
+	 *  Author: Oliver Woodings and Jono Brogan
+	 *  Functionality: Algorithm for finding matching rooms and times in relation to user-inputted values
+	 */
+
 	class Search {
 		
 		public $module;
@@ -14,6 +20,7 @@
 		public $period;
 		public $numRooms;
 		
+		//Returns matching data for the request page
 		public function getAvailableRequestData($db) {
 		
 			/**
@@ -236,7 +243,8 @@
             return $returnData;
 			
 		}
-
+	
+		//Returns request for the response page
 		public function getRequestsResponses($db,$types)
 		{
 			$results = array();

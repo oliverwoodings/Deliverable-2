@@ -1,5 +1,12 @@
 <?php 
 
+	/**
+	 *	File: entities/responsesPage.php
+	 *	Page: Responses
+	 *  Author: Jono Brogan, Matthew Swift, James Wightman, Ben Faiers
+	 *  Functionality: Shows the user their pending requests and allocated rooms
+	 */
+
 	class responses {
 		
 		function run($parent) {

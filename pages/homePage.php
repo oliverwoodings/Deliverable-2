@@ -1,5 +1,12 @@
 <?php 
 
+	/**
+	 *	File: entities/homePage.php
+	 *	Page: Home
+	 *  Author: Oliver Woodings and Jono Brogan
+	 *  Functionality: Displays key information to the user about the state of the system in relation to them
+	 */
+
 	class home {
 		
 		function run($parent) {

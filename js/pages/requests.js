@@ -1,3 +1,10 @@
+/**
+ *	File: js/pages/requests.js
+ *  Author: Oliver Woodings and Jono Brogan
+ *  For: Requests page
+ */
+
+
 var roomTable;
 
 $(document).ready(function(){

@@ -1,3 +1,10 @@
+/**
+ *	File: js/pages/responses.js
+ *  Author: Jono Brogan and Matthew Swift
+ *  For: Responses page
+ */
+
+
 var respTypeIn = {};
 var initial_load = true;
 

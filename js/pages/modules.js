@@ -1,3 +1,10 @@
+/**
+ *	File: js/pages/modules.js
+ *  Author: Oliver Woodings
+ *  For: Modules page
+ */
+
+
 var moduleTable;
 var lecArr;
 var selectedRow;

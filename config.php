@@ -1,5 +1,11 @@
 <?php
 
+	/**
+	 *	File: config.php
+	 *  Author: Oliver Woodings
+	 *  Functionality: Contains settings for the website framework
+	 */
+
 	class Config {
 		
 		public $database;
