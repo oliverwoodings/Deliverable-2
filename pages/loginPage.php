@@ -44,11 +44,11 @@
 			
 			?>
 			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-			<html>
+			<html xmlns="http://www.w3.org/1999/xhtml">
 				<head>
 					<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 					<title>Loughborough University TimeTabling System</title>
-					<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+					<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 				
 					<!--<link rel="stylesheet" href="css/default.css" type="text/css" />-->
 					<link rel="stylesheet" href="css/custom-theme/jquery-ui-1.8.16.custom.css" type="text/css" />

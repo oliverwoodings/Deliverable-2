@@ -112,6 +112,7 @@
 			$parent->displayHeader();
 			
 			?>
+			<div round_area>
 			<ul id="rounds">
 			<?php
 				$allRounds = $parent->db->getRounds();
@@ -121,11 +122,14 @@
 					if($round->getSemester() == $sem) $rounds[] = $round;
 				}
 				foreach($rounds as $round){
-				echo "<li>".$round->getName()."<input type='radio' name='round' id='".$round->getId()."_round' /></li>";
+				echo "<li>".$round->getName()."<input type='radio' name='round' id='".$round->getId()."_round' ";
+				if($round->getId() == $parent->db->getActiveRound()->getId()) echo "checked='checked'";
+				echo "/></li>";
 				}
-			
 			?>
 			</ul>
+			<input type="button" id="upd_round" value="Update Round" />
+			</div> 
 			
 			<!--Div which Displays Next Round-->
 			<div id="round_display">
