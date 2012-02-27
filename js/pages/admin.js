@@ -13,10 +13,6 @@ $(document).ready(function() {
 		});
 	}
 
-	//Appends a round number to the round number display div
-	var round_num = 1;
-	//$('<h1 class="und_line">Current Round: '+round_num+'</h1>').appendTo('#round_display');
-	
 	//on click of any 'Allocate Room' button, gets row id, gets any text in the rows textbox. If the rows textbox is blank, will 'allocate' the same room as the room preference. If text found in the relevant textbox, will allocate this room to the request.
 	$('.allocate_room').live("click",function() {
 		//get id
@@ -70,48 +66,22 @@ $(document).ready(function() {
 		});
 	});
 	
-	//When the 'next_round' is clicked, will increase the number, empty the 'round number display' div and append the new round numebr to the same div.
-	$('#next_round').click(function() {
-		/*round_num = round_num + 1;
-		$('#round_display').empty();
-		//('<h1 class="und_line">Current Round: '+round_num+'</h1>').appendTo('#round_display');
-		alert("You changed the Round!\nYou are now in Round: "+round_num);
-		alert("Time Table System Updated!!");*/
-	});
-	
-	var sem_num = 1;
-	
-	$('#next_semester').click(function() {
-		/*sem_num = sem_num + 1;
-		if (sem_num > 2) {
-			alert("You are already in Semester 2!!");
-		}
-		else {
-			var answer = confirm("Are you sure you want to ADVANCE to the NEXT SEMESTER??");
-			if (answer) {
-				alert("You have advanced from Semester 1 to SEMESTER 2!!!")
-			}
-			else {
-				alert("You have NOT ADVANCED TO THE NEXT SEMESTER!!");
-			}
-		}*/
+	$('#upd_round').live("click",function(){
+		var sel_round_id = $('input[name=round]:checked').attr('id');
+		var sel_round = sel_round_id.substr(0,sel_round_id.indexOf("_"));
 		
-	});
-	
-	$('#next_round').mouseenter(function() {
-		$(this).addClass('hover');
-	});
-	
-	$('#next_round').mouseleave(function() {
-		$(this).removeClass(' hover');
-	});
-	
-	$('#next_semester').mouseenter(function() {
-		$(this).addClass('hover');
-	});
-	
-	$('#next_semester').mouseleave(function() {
-		$(this).removeClass(' hover');
+		$.get(
+			"index.php?page=admin&get=updaternd&id=" + sel_round,
+			function (data) {
+				makePopup("Round Updated");
+				
+				javascript:location.reload(true);
+
+			},
+			"json"
+		);
+		
+
 	});
 	
 	updateTable();

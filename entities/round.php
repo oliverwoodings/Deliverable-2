@@ -36,6 +36,9 @@
 		public function getSemester() {
 			return $this->semester;
 		}
+		public function setActive($active) {
+			$this->active = $active;
+		}
 		
 	}
 

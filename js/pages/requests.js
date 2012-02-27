@@ -211,6 +211,32 @@ $(document).ready(function(){
 
     $("#submit").click(function() { submitRequest(); });
 	
+	//Clear form
+	$("#clear").click(function() {
+		$("#park_select").empty();
+		$("#roomty_select").empty();
+		$("#noStud_select").empty();
+		$("#priorty_check").attr('checked', false);
+		$("#1_check").attr('checked', false);
+		$("#2_check").attr('checked', false);
+		$("#3_check").attr('checked', false);
+		$("#4_check").attr('checked', false);
+		$("#5_check").attr('checked', false);
+		$('#week_boxes li').each(function(index) {
+			if(index < 12)
+    			$(this).find('input:checkbox').prop("checked", true);
+    		else
+    			$(this).find('input:checkbox').prop("checked", false);
+		});
+		$("#spec_input").val("");
+		$(".selectedtd").removeClass("selectedtd");
+		$(".completed").removeClass("completed").addClass("mand");
+		$("#module_id").remove();
+		$('#module_input').show();
+		$("#roompref_input .tag").remove();
+		updatePageData();
+	});
+	
 	$("#loadingOverlay").overlay({ 
 		top: 400,
 		mask: {

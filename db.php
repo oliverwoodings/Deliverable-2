@@ -30,6 +30,12 @@
 			$this->getStatuses();
 		}
 		
+		public function saveRoundStatuses($rounds) {
+			foreach ($rounds as $round) {
+				$this->query("UPDATE `round` SET active = '%s' WHERE round_id = '%s'", $round->getActive(), $round->getId());
+			}
+		}
+		
 		public function addAllocation($allocation) {
 			$this->query("INSERT INTO `allocation` (request_id, room_id, period) VALUES('%s', '%s', '%s')", $allocation->getRequest()->getId(), $allocation->getRoom()->getId(), $allocation->getPeriod());
 		}
@@ -56,7 +62,7 @@
 		}
 		
 		public function getHistory($limit = 0) {
-			$res = $this->query("SELECT * FROM `history` ORDER BY history_id DESC" . ($limit > 0?"LIMIT " . $limit:""));
+			$res = $this->query("SELECT * FROM `history` WHERE department_id = '%s' ORDER BY history_id DESC " . ($limit > 0?"LIMIT " . $limit:""), $this->parent->auth->getUserId());
 			$history = array();
 			while ($row = mysql_fetch_assoc($res)) {
 				$history[] = $row;
@@ -65,7 +71,7 @@
 		}
 		
 		public function addHistory($action, $msg) {
-			$this->query("INSERT INTO `history` (action, msg) VALUES ('%s', '%s')", $action, $msg);
+			$this->query("INSERT INTO `history` (action, msg, department_id) VALUES ('%s', '%s', '%s')", $action, $msg, $this->parent->auth->getUserId());
 		}
 		
 		public function saveRequest($request) {

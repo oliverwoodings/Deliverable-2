@@ -103,6 +103,27 @@
         					die('ERROR');
 						}
 						break;
+				case "updaternd":
+						if(isset($_GET['id'])){
+							$allRounds = $parent->db->getRounds();
+							$sem = $parent->auth->getUserSemester();
+							$rounds = array();
+							foreach($allRounds  as $round){
+								if($round->getSemester() == $sem) $rounds[] = $round;
+							}
+							foreach($rounds as $round){
+								if($round->getId() == $_GET['id']){
+									$round->setActive(true);
+								}else{ $round->setActive(false); }
+							}
+							$parent->db->saveRoundStatuses($rounds);
+						}else{
+							header("HTTP/1.0 500 Internal Server Error");
+        					header('Content-Type: application/json');
+        					die('ERROR');
+						}
+					
+					break;
 				}
                 
                 return;
@@ -112,7 +133,7 @@
 			$parent->displayHeader();
 			
 			?>
-			<div round_area>
+			<div id="round_area">
 			<ul id="rounds">
 			<?php
 				$allRounds = $parent->db->getRounds();

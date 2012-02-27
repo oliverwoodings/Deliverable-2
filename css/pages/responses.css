@@ -10,8 +10,8 @@
 		overflow:hidden;
 		margin-top: -20px;
 		margin-left: 10px;
-		border: 1px solid;
 		width:880px;
+		border: 1px solid;
 		padding: 10px;
 		background-color: #F5F7F9;
 		border-radius: 4px;
@@ -40,7 +40,7 @@
 	
 	#filterholder{
 		border: 1px solid #999;
-		height: 115;
+		height: 115px;
 		padding: 5px 0px 10px 10px;
 		border-radius: 4px;
 		background-color: white;

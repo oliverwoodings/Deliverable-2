@@ -430,11 +430,13 @@ h1 {
 #subwrap{
 	margin-left:auto;
 	margin-right:auto;
-	width:200px;
+	width: 400px;
 }
-#submit{
-	width:200px;
-	height:50px;
+#submit,#clear{
+	width:170px;
+	margin-right: 10px;
+	margin-left: 10px;
+	height:45px;
 }
 
 /* TOKENIZER */

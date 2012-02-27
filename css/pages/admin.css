@@ -42,10 +42,17 @@
 	}
 	
 	#round_display {
-		margin-top: 100px;
+		margin-top: 10px;
 		margin-left: 350px;
 		width: 250px;
 		position: relative;	
+	}
+	
+	#round_area{
+		width:250px;	
+	}
+	#upd_round{
+		float:right;
 	}
 
 	.hover {
