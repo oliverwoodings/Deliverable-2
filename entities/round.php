@@ -3,24 +3,26 @@
 	class Round {
 		
 		private $id;
-		private $round;
+		private $name;
 		private $startDate;
 		private $endDate;
 		private $active;
+		private $semester;
 		
-		public function __construct($id, $round, $startDate, $endDate, $active) {
+		public function __construct($id, $name, $startDate, $endDate, $active, $semester) {
 			$this->id = $id;
-			$this->round = $round;
+			$this->name = $name;
 			$this->startDate = $startDate;
 			$this->endDate = $endDate;
 			$this->active = $active;
+			$this->semester = $semester;
 		}
 		
 		public function getId() {
 			return $this->id;
 		}
-		public function getRound() {
-			return $this->round;
+		public function getName() {
+			return $this->name;
 		}
 		public function getStartDate() {
 			return $this->startDate;
@@ -30,6 +32,9 @@
 		}
 		public function getActive() {
 			return $this->active;
+		}
+		public function getSemester() {
+			return $this->semester;
 		}
 		
 	}

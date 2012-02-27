@@ -10,129 +10,40 @@
 			$parent->displayHeader();
 			
 			?>
-			
-			<div id="timeline">
-				<div id="r0" class="circle_small round"><h3>P</h3></div>
-				<div class="tooltip">
-					<div>Start Date: <span id="sdate">wegew</span> </div>
-					<div>End Date: <span id="edate">wrgwe</span> </div>
+			<div id="timeline_container">
+				<div id="timeline_float">
+					<div id="timeline">
+						<?php
+						
+							$rounds = $parent->db->getRounds();
+							$i = 1;
+							foreach ($rounds as $round) {
+								if ($round->getSemester() == $parent->auth->getUserSemester()) {
+									echo '<div id="r0" class="' . ($round->getActive()?'circle':'circle_small') . ' round"><h3>' . $round->getName() . '</h3></div>
+										<div class="tooltip">
+											<div>Start Date: <span id="sdate">' . date("d-m-Y", strtotime($round->getStartDate())) . '</span> </div>
+											<div>End Date: <span id="edate">' . date("d-m-Y", strtotime($round->getEndDate())) . '</span> </div>
+										</div>';
+								}
+								$i++;
+							}
+						
+						
+						?>
+						<hr id="line"/>
+					</div>
 				</div>
-				<div id="r1" class="circle round"><h3 style="margin-top:21px;">Round<br/>1</h3></div>
-				<div class="tooltip">
-					<div>Start Date: <span id="sdate">wegew</span> </div>
-					<div>End Date: <span id="edate">wrgwe</span> </div>
-				</div>
-				<div id="r2" class="circle_small round"><h3>2</h3></div>
-				<div class="tooltip">
-					<div>Start Date: <span id="sdate">wegew</span> </div>
-					<div>End Date: <span id="edate">wrgwe</span> </div>
-				</div>
-				<div id="r3" class="circle_small round"><h3>3</h3></div>
-				<div class="tooltip">
-					<div>Start Date: <span id="sdate">wegew</span> </div>
-					<div>End Date: <span id="edate">wrgwe</span> </div>
-				</div>
-				<div id="r4" class="circle_small round"><h3>4</h3></div>
-				<div class="tooltip">
-					<div>Start Date: <span id="sdate">wegew</span> </div>
-					<div>End Date: <span id="edate">wrgwe</span> </div>
-				</div>
-				<div id="r5" class="circle_small round"><h3>5</h3></div>
-				<div class="tooltip">
-					<div>Start Date: <span id="sdate">wegew</span> </div>
-					<div>End Date: <span id="edate">wrgwe</span> </div>
-				</div>
-				<hr id="line"/>
 			</div>
 			<div id="left_side">
 				<div id="activity_feed">
 					<h2>Recent Activity</h2>
 					<div id="stream">
 					<ul>
-						<li class="item">
-							<p>
-								<span class="date">15/08/2011</span>
-								<i>Rooms Added:</i> C0D400, Mon, Period 4
-							</p>
-						</li>
-						<li class="item">
-							<p>
-								<span class="date">15/08/2011</span>
-								<i>Rooms Added:</i> C0C111, Tue, Period 9
-							</p>
-						</li>
-						<li class="item">
-							<p>
-								<span class="date">15/08/2011</span>
-								<i>Rooms Added:</i> C0B130, Fri, Period 7
-							</p>
-						</li>
-						<li class="item">
-							<p>
-								<span class="date">15/08/2011</span>
-								<i>Rooms Added:</i> C0B145, Thur, Period 1
-							</p>
-						</li>
-						<li class="item">
-							<p>
-								<span class="date">14/08/2011</span>
-								<i>Rooms Edited:</i> C0A123, Wed, Period 5
-							</p>
-						</li>
-						<li class="item cancel">
-							<p>
-								<span class="date">14/08/2011</span>
-								<i>Request Cancelled:</i> C0B190, Fri, Period 7
-							</p>
-						</li>
-						<li class="item add">
-							<p>
-								<span class="date">14/08/2011</span>
-								 <i>Request Added:</i> COB190, Fri, Period 7
-							</p>
-						</li>
-						<li class="item add">
-							<p>
-								<span class="date">14/08/2011</span>
-								 <i>Request Added:</i> COA123, Wed, Period 6
-							</p>
-						</li>
-						<li class="item add">
-							<p>
-								<span class="date">14/08/2011</span>
-								 <i>Request Added:</i> COA101, Tue, Period 2
-							</p>
-						</li>
-						<li class="item decline">
-							<p>
-								<span class="date">12/08/2011</span>
-								<i>Allocation Declined:</i> COA123, Mon, Period 2
-							</p>
-						</li>
-						<li class="item decline">
-							<p>
-								<span class="date">12/08/2011</span>
-								<i>Allocation Declined:</i> COA123, Tue, Period 1
-							</p>
-						</li>
-						<li class="item begin">
-							<p>
-								<span class="date">11/08/2011</span>
-								<i>Round Begins:</i> Round 1
-							</p>
-						</li>
-						<li class="item">
-							<p>
-								<span class="date">10/08/2011</span>
-								<i>Rooms Allocated:</i> 5 Fails, 3 Reallocations
-							</p>
-						</li>
-						<li class="item begin">
-							<p>
-								<span class="date">08/08/2011</span>
-								<i>Round Ends:</i> Priority Round
-							</p>
-						</li>
+						<?php
+							foreach ($parent->db->getHistory() as $history) {
+								echo '<li class="item' . (($history["action"] == "Round Begins" || $history["action"] == "Round Ends")?" begin":"") . '"><p><span class="date">' . date("d/m/Y", strtotime($history["date"])) . '</span> <i>' . $history["action"] . ':</i> ' . $history["msg"] . '</p></li>';
+							}
+						?>
 					</ul>
 					</div>
 				</div>
@@ -152,34 +63,29 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>COA123</td>
-								<td>Mon</td>
-								<td class="center" >2</td>
-								<td class="center" >CC013</td>
-								<td class="center" >CC012</td>
-							</tr>
-							<tr style="background-color:#ff6666;">
-								<td style="background-color:#ff6666;">COB190</td>
-								<td>Fri</td>
-								<td class="center" >6</td>
-								<td class="center" >J004</td>
-								<td class="center" >FAILED</td>
-							</tr>
-							<tr>
-								<td>COA111</td>
-								<td>Wed</td>
-								<td class="center" >3</td>
-								<td class="center" >N003</td>
-								<td class="center" >Cope</td>
-							</tr>
-							<tr>
-								<td>COB145</td>
-								<td>Thur</td>
-								<td class="center" >1</td>
-								<td class="center" >T005</td>
-								<td class="center" >CC012</td>
-							</tr>
+							<?php
+								foreach ($parent->db->getUrgentRequests(8) as $request) {
+									$rms = array();
+									foreach ($request->getRooms() as $room) $rms[] = $room->getCode();
+									if ($request->getStatus()->getName() == "Reallocated") {
+										$allocs = $parent->db->getAllocationsByRequestId($request->getId());
+										$allrooms = array();
+										foreach ($allocs as $alloc) $allrooms[] = $alloc->getRoom()->getCode();
+										echo '<tr id="' . $request->getId() . '"><td class="center">' . $request->getModule()->getCode() . '</td>
+											<td class="center">' . str_replace(array(1,2,3,4,5), array("Mon", "Tue", "Wed", "Thur", "Fri"), $request->getDay()) . '</td>
+											<td class="center">' . $request->getPeriod() . '</td>
+											<td class="center">' . implode(" ", $rms) . '</td>
+											<td class="center">' . implode(" ", $allrooms) . "</td></tr>";
+									} else {
+										echo '<tr id="' . $request->getId() . '" class="failed"><td class="center">' . $request->getModule()->getCode() . '</td>
+											<td class="center">' . str_replace(array(1,2,3,4,5), array("Mon", "Tue", "Wed", "Thur", "Fri"), $request->getDay()) . '</td>
+											<td class="center">' . $request->getPeriod() . '</td>
+											<td class="center">' . implode(" ", $rms) . '</td>
+											<td class="center">FAILED</td></tr>';
+									}
+								}
+							
+							?>
 						</tbody>
 					</table>
 				</div>

@@ -1,0 +1,94 @@
+	.header {
+		text-decoration: underline;
+		width: 1300px;
+	}
+
+	.head {
+		width: 920px;
+		margin-left: 5px;
+		margin-top: 50px;
+		float: left;
+		position: relative;
+	}
+
+	#tbl_body {
+		border-left: 1px solid black;
+		border-right: 1px solid black;
+	}
+	
+	.row_w{
+		width:50px;
+	}
+
+	#button {
+		width: 200px;
+		height: 50px;
+	}
+
+	#next_round {
+		width: 400px;
+		height: 50px;
+		margin-left: 25px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	
+	#next_semester {
+		width: 400px;
+		height: 50px;
+		margin-left: 25px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	
+	#round_display {
+		margin-top: 100px;
+		margin-left: 350px;
+		width: 250px;
+		position: relative;	
+	}
+
+	.hover {
+		text-decoration: underline;
+	}
+
+	#round_num_display {
+		margin-left:10px;
+		width: 900px;
+		position: relative;
+		margin-bottom: 100px;
+	}
+	
+	#round_div {
+		width: 448px;
+		float: left;
+	}
+	
+	#semester_div {
+		width: 448px;
+		float: right;
+		position: relative;
+	}
+
+	h1 {
+		float: center;
+		font-size: 1em;
+	}
+
+	.und_line {
+		text-decoration: underline;
+		font-size: 2em;
+	}
+
+	p {
+		text-align: center;
+	}
+
+	.mod_title {
+		overflow: auto;
+	}
+
+	.day {
+		width: 80px;
+	}
+

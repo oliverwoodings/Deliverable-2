@@ -6,12 +6,12 @@ var editCode;
 $(document).ready(function(){
 	moduleTable = $('#modules').dataTable( {
 			"bJQueryUI": true,
-		"aaSorting": [[ 0, "asc" ]],
-		"bAutoWidth": true,
-		"bDeferRender": true,
-		"sScrollY": "240px",
-        "sDom": '<"H"Tfr>t<"F"i>S',
-			"bPaginate": false,
+			"aaSorting": [[ 1, "asc" ]],
+			"bAutoWidth": true,
+			"bDeferRender": false,
+			"sScrollY": "300px",
+			"sDom": '<"H"Tfr>t<"F"i>S',
+			"bPaginate": false
 		} );
 	
 	fillModTable();

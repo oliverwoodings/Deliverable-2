@@ -6,518 +6,231 @@
 			
 			$parent->auth->requireLogin();
 			
+			if (isset($parent->get)) {
+				
+				switch($parent->get){
+					case "update":
+						$search = new Search();
+						if(isset($_GET['types'])){
+							$types = json_decode($_GET['types']);
+						}
+						if(count($types)> 0){
+							//get request/responses
+							$results = $search->getRequestsResponses($parent->db,$types);
+							//print_r($results)
+							//Format into JSON-parsable array
+							$returnData = array();
+							foreach($results as $key => $elm){
+								$allocations = $parent->db->getAllocationsByRequestId($elm->getId());
+								$returnData[$key]['requestId'] = $elm->getId();
+								$returnData[$key]['priority'] = $elm->getPriority();
+								$returnData[$key]['round'] = $elm->getRound()->getName();
+								$returnData[$key]['module_code'] = $elm->getModule()->getCode();
+								$returnData[$key]['module_title'] = $elm->getModule()->getName();
+								$returnData[$key]['day'] = $elm->getDay();
+								$returnData[$key]['time'] = $elm->getPeriod();
+								$returnData[$key]['length'] = $elm->getLength();
+								$returnData[$key]['numStudents'] = $elm->getNumStudents();
+								$returnData[$key]['numRooms'] = $elm->getNumRooms();
+								$returnData[$key]['roomPrefs'] = array();
+								//if(count($elm->getRooms())==0) $returnData[$key]['roomPrefs'] = NULL;
+								foreach($elm->getRooms() as $room){
+									array_push($returnData[$key]['roomPrefs'],$room->getCode());	
+								}
+								//get room allocations
+								$returnData[$key]['roomAllocations'] = array();
+								foreach($allocations as $allocation){
+									array_push($returnData[$key]['roomAllocations'],$allocation->getRoom()->getCode());
+								}
+								$park = $elm->getPark();
+								if(isset($park)){
+									$returnData[$key]['park'] = $elm->getPark()->getName();
+								}else {
+									$returnData[$key]['park'] = "No Preference";
+								}
+								$roomType = $elm->getRoomType();
+								if(isset($roomType)){
+									$returnData[$key]['roomtype'] = $elm->getRoomType()->getName();	
+								}else{
+									$returnData[$key]['roomtype'] = "No Preference";
+								}
+								$returnData[$key]['weeks'] = $elm->getWeeks();
+								$returnData[$key]['facilities'] = array();
+								foreach($elm->getFacilities() as $fac){
+									array_push($returnData[$key]['facilities'],$fac->getName());
+								}
+								$returnData[$key]['specReq'] = $elm->getSpecReq();
+								$returnData[$key]['status_id'] = $elm->getStatus()->getId();
+								$returnData[$key]['status_code'] = $elm->getStatus()->getName();
+								// need semester!!!!
+							}
+							
+	                        //Echo JSON
+	                        echo json_encode($returnData);
+	                        
+							break; //case break
+							}
+					case "modules":
+						$modules = $parent->db->getModules();
+						$returnData = array();
+						foreach($modules as $key => $module){
+							$returnData[] = $module->getCode()." - ".$module->getName();
+						}
+						echo json_encode($returnData);
+						
+						break;
+					case "remove":
+						if(isset($_GET['id'])){
+							//Delete request
+							$request = $parent->db->getRequestById($_GET['id']);
+							$parent->db->deleteRequest($_GET['id']);
+							// Update History
+							$parent->db->addHistory("Request Cancelled", $request->getModule()->getCode() . ", " . str_replace(array(1,2,3,4,5), array("Mon", "Tue", "Wed", "Thur", "Fri"), $request->getDay()) . ", Period " . $request->getPeriod());
+						}else{
+							header("HTTP/1.0 500 Internal Server Error");
+        					header('Content-Type: application/json');
+        					die('ERROR');
+						}
+						break;
+					case "decline":
+						if(isset($_GET['id'])){
+							//Decline Allocation
+							$parent->db->declineAllocation($_GET['id']);
+							//Update History
+							$request = $parent->db->getRequestById($_GET['id']);
+							$parent->db->addHistory("Allocation Declined", $request->getModule()->getCode() . ", " . str_replace(array(1,2,3,4,5), array("Mon", "Tue", "Wed", "Thur", "Fri"), $request->getDay()) . ", Period " . $request->getPeriod());
+						}else{
+							header("HTTP/1.0 500 Internal Server Error");
+        					header('Content-Type: application/json');
+        					die('ERROR');
+						}
+						break;
+				}
+                
+                return;
+			
+			}
+			
 			$parent->title = "Responses";
 			$parent->displayHeader();
 			
 			?>
+			<div id="loadingOverlay">
+				<img src="images/loading-bar.gif" />
+				Loading Data...
+			</div>
 			<div id="top">
 				<div id="ModSearch">
 					<p class="heading">Find Module:</p>
-					<textarea id="modulesearch" rows="5" cols="100" maxLength="50"></textarea>
+					<div class="ui-widget">
+						<input id="modulesearch"></input>
+					</div>
+					<input type="button" id="clear" value="Clear" ></input>
 				</div>
 							
 				<div id="filters">
 					<p class="heading">Additional Filters:</p>
+					
+					<div id="filterholder">
 					<div id="Round">
-						<p>Round</p>
-							<ul id="list">
+						<p class="subHeading">Round</p>
+							<ul id="roundlist">
 								<div id="roundcheckbox1">
-									<li id="roundp"><input name="roundp" type="checkbox" value="A">P<br></li>
-									<li id="round1"><input name="round1" type="checkbox" value="B">1<br></li>
+									<li id="roundp"><input class="round_check" type="checkbox" value="p">P<br></li>
+									<li id="round1"><input class="round_check" type="checkbox" value="1">1<br></li>
 								</div>
 								<div id="roundcheckbox2">
-									<li id="round2"><input name="round2" type="checkbox" value="C">2<br></li>
-									<li id="round3"><input name="round3" type="checkbox" value="A">3<br></li>
+									<li id="round2"><input class="round_check" type="checkbox" value="2">2<br></li>
+									<li id="round3"><input class="round_check" type="checkbox" value="3">3<br></li>
 								</div>
 								<div id="roundcheckbox3">
-									<li id="round4"><input name="round4" type="checkbox" value="B">4<br></li>
-									<li id="round5"><input name="round5" type="checkbox" value="C">5<br></li>
+									<li id="round4"><input class="round_check" type="checkbox" value="4">4<br></li>
+									<li id="round5"><input class="round_check" type="checkbox" value="a">A<br></li>
 								</div>
 							</ul>
-						
 					</div>
 								
 					<div id="Part">
-						<p>Part</p>
+						<p class="subHeading">Part</p>
 						<ul id="partlist">
 							<div id="checkboxcol1">
-								<li id="partA"><input name="partA" type="checkbox" value="A" >A<br></li>
-								<li id="partB"><input name="partB" type="checkbox" value="B">B<br></li>
+								<li id="parta"><input name="partA" class="part_check" type="checkbox" value="A" >A<br></li>
+								<li id="partb"><input name="partB" class="part_check" type="checkbox" value="B">B<br></li>
 							</div>
 							<div id="checkboxcol2">
-								<li id="partC"><input name="partC" type="checkbox" value="C">C<br></li>
-								<li id="partD"><input name="partD" type="checkbox" value="D">D<br></li>
+								<li id="partc"><input name="partC" class="part_check" type="checkbox" value="C">C<br></li>
+								<li id="partd"><input name="partD" class="part_check" type="checkbox" value="D">D<br></li>
 							</div>
 							<div id="checkboxcol3">
-								<li id="partP"><input name="partP" type="checkbox" value="P">P<br></li>
-								<li id="partZ"><input name="partZ" type="checkbox" value="Z">Z<br></li>
+								<li id="partp"><input name="partP" class="part_check" type="checkbox" value="P">P<br></li>
+								<li id="partz"><input name="partZ" class="part_check" type="checkbox" value="Z">Z<br></li>
 							</div>
 						</ul>				
 					</div>
 								
 					<div id="Day">
-						<p>Day</p>
+						<p class="subHeading">Day</p>
 						<form name="dayform">
 						<ul id="daylist">
-							<li id="Mon"><input name="day" type="checkbox" value="Mon" onclick='dayfilter()'>Mon<br></li>
-							<li id="Tue"><input name="day" type="checkbox" value="Tue" onclick='dayfilter()'>Tue<br></li>
-							<li id="Wed"><input name="day" type="checkbox" value="Wed" onclick='dayfilter()'>Wed<br></li>
-							<li id="Thur"><input name="day" type="checkbox" value="Thur" onclick='dayfilter()'>Thur<br></li>
-							<li id="Fri"><input name="day" type="checkbox" value="Fri" onclick='dayfilter()'>Fri<br></li>
+							<li id="monday"><input name="day1" class="day_check" type="checkbox" value="1"> Mon<br></li>
+							<li id="tuesday"><input name="day2" class="day_check" type="checkbox" value="2"> Tue<br></li>
+							<li id="wednesday"><input name="day3" class="day_check" type="checkbox" value="3"> Wed<br></li>
+							<li id="thursday"><input name="day4" class="day_check" type="checkbox" value="4"> Thur<br></li>
+							<li id="friday"><input name="day5" class="day_check" type="checkbox" value="5"> Fri<br></li>
 						</ul>
 						</form>
 					</div>
-							
+					</div>		
 				</div>
+				
 						
 				<div id="type">
 					<p class="heading">Type:</p>
-					<ul id="list">
-						<li id="pending"><input type="checkbox" name="Pending" checked="checked" class="type_check"  value="op1">Pending<br></li>
-						<li id="allocated"><input name="Allocated" type="checkbox" class="type_check" value="op2">Allocated<br></li>
-						<li id="declined"><input name="Declined" type="checkbox" class="type_check" value="op3">Declined<br></li>
-						<li id="failed"><input name="Failed" type="checkbox" class="type_check" value="op4">Failed<br></li>
+					<ul id="typelist">
+						<?php
+							$statuses = array();
+							$statuses["pending"] = $parent->db->getStatusByName("Pending")->getId();
+							$statuses["allocated"] = $parent->db->getStatusByName("Allocated")->getId();
+							$statuses["declined"] = $parent->db->getStatusByName("Declined")->getId();
+							$statuses["failed"] = $parent->db->getStatusByName("Failed")->getId();
+							$statuses["reallocated"] = $parent->db->getStatusByName("Reallocated")->getId();
+						?>
+						<li id="pending"><input name="Pending"  type="checkbox" checked="checked" class="type_check"  value="<?php echo $statuses["pending"];?>"> Pending<br></li>
+						<li id="allocated"><input name="Allocated" checked="checked" type="checkbox" class="type_check" value="<?php echo $statuses["allocated"];?>"> Allocated<br></li>
+						<li id="reallocated"><input name="Reallocated" checked="checked" type="checkbox" class="type_check" value="<?php echo $statuses["reallocated"];?>"> Re-Allocated<br></li>
+						<li id="declined"><input name="Declined" type="checkbox" class="type_check" value="<?php echo $statuses["declined"];?>"> Declined<br></li>
+						<li id="failed"><input id="failed_check" name="Failed" type="checkbox" class="type_check" value="<?php echo $statuses["failed"];?>"> Failed<br></li>
 					</ul>
 				</div>
+				
+				
 					
 			</div>
+			
+			<!--Add OVERLAY IF NEEDED-->
+			<!--
+			<div id="addEditOverlay" class="overlay" style="top: 65.2px; left: 780.5px; position: fixed; display: block; ">
+				<a class="close"></a>
+				<h2 id="model_head">Edit Request</h2>
+			</div>
+			-->
+						
 			<div id="Results">
 				<div id="divContainer">
 						<div id="header" class="divfixedHeader">
-							<div class="round" id="r" value="round">Round</div>
-							<div class="modcode" id="ModCode" value="modcode">Module Code</div>
-							<div class="modtitle" id="ModTitle" value="modtitle">Module Title</div>
-							<div class="day" id="d" value="day">Day</div>
-							<div class="time" id="Time" value="time">Time</div>
-							<div class="length" id="Length" value="length">Length</div>
-							<div class="numstudents" id="NumStudents" value="numstudents">No. Of Students</div>
-							<div class="numrooms" id="NumRooms" value="numrooms">No. Of Rooms</div>
-							<div class="roompreference" id="Roompreference" value="roompreference">Room Preference</div>
-							<div class="roomallocation" id="Roomallocation" value="roomallocation">Room Allocation</div>	
+							<div class="mainheader" id="title_round" value="0">Round</div>
+							<div class="mainheader" id="title_modcode" value="1">Module Code</div>
+							<div class="mainheader" id="title_modtitle" value="2">Module Title</div>
+							<div class="mainheader" id="title_day" value="3">Day</div>
+							<div class="mainheader" id="title_time" value="4">Time</div>
+							<div class="mainheader" id="title_length" value="5">Length</div>
+							<div class="mainheader" id="title_numstudents" value="6">No. Of Students</div>
+							<div class="mainheader" id="title_numrooms" value="7">No. Of Rooms</div>
+							<div class="mainheader" id="title_roompreference" value="8">Room Preference</div>
+							<div class="mainheader" id="title_roomallocation" value="9">Room Allocation</div>	
 						</div>
 						<div id="scrollablearea">
-							<!--Div row 1.-->
-							<div id="row1" class="scrollContent Pending" onMouseDown='showonlyone("newboxes1");'>
-								
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-								<div class="toolbar">
-									<span class="edit">Edit </span><img src="images\tools.png" class="edit_btn" height="20" width="20" />
-									<span class="delete">Delete </span><img src="images\delete.png" class="del_btn" id="tool2" height="20" width="20" />
-								</div>
-							</div>
-							<!--Hidden Div for Div Row 1 which will display all the information of the request/repsonse clicked.-->
-							<div class="hidden" name="newboxes" id="newboxes1">
-								<div class="info1">
-									<br><br>
-									<span class="title">Park:</span><p class="normal"> No Preference</p>
-									<br><br>
-									<span class="title">Room Type:</span><p class="normal"> Lecture</p>
-									<br><br>
-									<span class="title">Weeks:</span><p class="normal"> 1-4 and 6-10</p>
-									<br>
-								</div>
-								<div class="info2">
-									<br>
-									<span class="title"><center>Facilities</center></span>
-									<div class="facilities">
-										<ul>
-											<li>Wheelchair Access</li>
-											<li>Data Projector</li>
-											<li>Wolf Vision</li>
-										</ul>
-									</div>
-									<br>					
-								</div>
-								<div class="info3">
-									<br>
-									<span class="title"><center>Special Requirements</center></span>
-									<br>
-									<div class="requirementstextarea">
-										<form>
-											<textarea name="specialrequirements" cols="25" rows="6" readonly>Special Requirements Displayed Here - Non Edittable</textarea>
-										</form>
-									</div>
-								</div>
-							</div>	
-							<!--Div Row 2.-->				
-							<div id="row2" class="scrollContent Allocated" onMouseDown='showonlyone("newboxes2");'>
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Essential Skills In Computing</div>
-								<div class="daycontent">Monday</div>
-								<div class="timecontent">10:00</div>
-								<div class="lengthcontent">1</div>
-								<div class="numstudentscontent">25</div>
-								<div class="numroomscontent">1</div>
-								<div class="roompreferencecontent">A001</div>
-								<div class="roomallocationcontent">A001</div>
-								<div class="toolbar">
-									<span class="edit">Edit </span><img src="images\tools.png" class="edit_btn" height="20" width="20" />
-									<span class="delete">Delete </span><img src="images\delete.png" class="del_btn" id="tool2" height="20" width="20" />
-								</div>
-							</div>
-							<!--Hidden Div for Div Row 2 which will display all the information of the request/repsonse clicked.-->
-							<div class="hidden" name="newboxes" id="newboxes2">
-								<div class="info1">
-									<br><br>
-									<span class="title">Park:</span><p class="normal"> No Preference</p>
-									<br><br>
-									<span class="title">Room Type:</span><p class="normal"> Lecture</p>
-									<br><br>
-									<span class="title">Weeks:</span><p class="normal"> 1-4 and 6-10</p>
-									<br>
-								</div>
-								<div class="info2">
-									<br>
-									<span class="title"><center>Facilities</center></span>
-									<div class="facilities">
-										<ul>
-											<li>Wheelchair Access</li>
-											<li>Data Projector</li>
-											<li>Wolf Vision</li>
-										</ul>
-									</div>
-									<br>					
-								</div>
-								<div class="info3">
-									<br>
-									<span class="title"><center>Special Requirements</center></span>
-									<br>
-									<div class="requirementstextarea">
-										<form>
-											<textarea name="specialrequirements" cols="25" rows="6" readonly>Special Requirements Displayed Here - Non Edittable</textarea>
-										</form>
-									</div>
-								</div>			
-							</div>
 							
-							<div id="row3" class="scrollContent Declined" onMouseDown='showonlyone("newboxes3");'>
-								<div class="roundcontent">2</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-								<div class="toolbar">
-									<span class="edit">Edit </span><img src="images\tools.png" class="edit_btn" height="20" width="20" />
-									<span class="delete">Delete </span><img src="images\delete.png" class="del_btn" id="tool2" height="20" width="20" />
-								</div>
-							</div>
-							<!--Hidden Div for Div Row 3 which will display all the information of the request/repsonse clicked.-->
-							<div class="hidden" name="newboxes" id="newboxes3">
-								<div class="info1">
-									<br><br>
-									<span class="title">Park:</span><p class="normal"> No Preference</p>
-									<br><br>
-									<span class="title">Room Type:</span><p class="normal"> Lecture</p>
-									<br><br>
-									<span class="title">Weeks:</span><p class="normal"> 1-4 and 6-10</p>
-									<br>
-								</div>
-								<div class="info2">
-									<br>
-									<span class="title"><center>Facilities</center></span>
-									<div class="facilities">
-										<ul>
-											<li>Wheelchair Access</li>
-											<li>Data Projector</li>
-											<li>Wolf Vision</li>
-										</ul>
-									</div>
-									<br>					
-								</div>
-								<div class="info3">
-									<br>
-									<span class="title"><center>Special Requirements</center></span>
-									<br>
-									<div class="requirementstextarea">
-										<form>
-											<textarea name="specialrequirements" cols="25" rows="6" readonly>Special Requirements Displayed Here - Non Edittable</textarea>
-										</form>
-									</div>
-								</div>			
-							</div>
-							<div id="row4" class="scrollContent Failed" onMouseDown='showonlyone("newboxes4");'>
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-								<div class="toolbar">
-									<span class="edit">Edit </span><img src="images\tools.png" class="edit_btn" height="20" width="20" />
-									<span class="delete">Delete </span><img src="images\delete.png" class="del_btn" id="tool2" height="20" width="20" />
-								</div>
-							</div>
-							<!--Hidden Div for Div Row 4 which will display all the information of the request/repsonse clicked.-->
-							<div class="hidden" name="newboxes" id="newboxes4">
-								<div class="info1">
-									<br><br>
-									<span class="title">Park:</span><p class="normal"> No Preference</p>
-									<br><br>
-									<span class="title">Room Type:</span><p class="normal"> Lecture</p>
-									<br><br>
-									<span class="title">Weeks:</span><p class="normal"> 1-4 and 6-10</p>
-									<br>
-								</div>
-								<div class="info2">
-									<br>
-									<span class="title"><center>Facilities</center></span>
-									<div class="facilities">
-										<ul>
-											<li>Wheelchair Access</li>
-											<li>Data Projector</li>
-											<li>Wolf Vision</li>
-										</ul>
-									</div>
-									<br>					
-								</div>
-								<div class="info3">
-									<br>
-									<span class="title"><center>Special Requirements</center></span>
-									<br>
-									<div class="requirementstextarea">
-										<form>
-											<textarea name="specialrequirements" cols="25" rows="6" readonly>Special Requirements Displayed Here - Non Edittable</textarea>
-										</form>
-									</div>
-								</div>			
-							</div>
-							<div id="row5" class="scrollContent Pending" onMouseDown='showonlyone("newboxes5");'>
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-								<div class="toolbar">
-									<span class="edit">Edit </span><img src="images\tools.png" class="edit_btn" height="20" width="20" />
-									<span class="delete">Delete </span><img src="images\delete.png" class="del_btn" id="tool2" height="20" width="20" />
-								</div>
-							</div>
-							<!--Hidden Div for Div Row 5 which will display all the information of the request/repsonse clicked.-->
-							<div class="hidden" name="newboxes" id="newboxes5">
-								<div class="info1">
-									<br><br>
-									<span class="title">Park:</span><p class="normal"> No Preference</p>
-									<br><br>
-									<span class="title">Room Type:</span><p class="normal"> Lecture</p>
-									<br><br>
-									<span class="title">Weeks:</span><p class="normal"> 1-4 and 6-10</p>
-									<br>
-								</div>
-								<div class="info2">
-									<br>
-									<span class="title"><center>Facilities</center></span>
-									<div class="facilities">
-										<ul>
-											<li>Wheelchair Access</li>
-											<li>Data Projector</li>
-											<li>Wolf Vision</li>
-										</ul>
-									</div>
-									<br>					
-								</div>
-								<div class="info3">
-									<br>
-									<span class="title"><center>Special Requirements</center></span>
-									<br>
-									<div class="requirementstextarea">
-										<form>
-											<textarea name="specialrequirements" cols="25" rows="6" readonly>Special Requirements Displayed Here - Non Edittable</textarea>
-										</form>
-									</div>
-								</div>			
-							</div>
-							<div class="scrollContent">
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-							</div>
-							<div  class="scrollContent">
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-							</div>
-							<div  class="scrollContent">
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-							</div>
-							<div  class="scrollContent">
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-							</div>
-							<div  class="scrollContent">
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-							</div>
-							<div  class="scrollContent">
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-							</div>
-							<div  class="scrollContent">
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-							</div>
-							<div  class="scrollContent">
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-							</div>
-							<div  class="scrollContent">
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-							</div>
-							<div  class="scrollContent">
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-							</div>
-							<div  class="scrollContent">
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-							</div>
-							<div  class="scrollContent">
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-							</div>
-							<div  class="scrollContent">
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-							</div>
-							<div  class="scrollContent">
-								<div class="roundcontent">1</div>
-								<div class="modcodecontent">C0B101</div>
-								<div class="modtitlecontent">Logic and Functional Programming</div>
-								<div class="daycontent">Wednesday</div>
-								<div class="timecontent">12:00</div>
-								<div class="lengthcontent">3</div>
-								<div class="numstudentscontent">800</div>
-								<div class="numroomscontent">2</div>
-								<div class="roompreferencecontent">JJ004</div>
-								<div class="roomallocationcontent">JJ004</div>
-							</div>
 						</div>
 					</div>			
 			</div>

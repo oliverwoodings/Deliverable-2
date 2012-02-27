@@ -1,6 +1,7 @@
 var tabState = 0;
 var day;
 var period;
+var roomTable;
 
 function drawTable() {
 	
@@ -61,7 +62,7 @@ function drawTable() {
 	}
     
     //On cell click update the overlay
-    $(".clickDiv").click(function(event) { updateOverlay($(event.target).parent().attr('id')); });
+    $(".clickDiv").click(function(event) { updateOverlay($(event.target).parent().attr('id')); setTimeout('roomTable.fnAdjustColumnSizing();', 200); });
     
     //Fancybox stuff
     $(".clickDiv").fancybox({ padding: 20, hideOnContentClick: false });
@@ -158,12 +159,8 @@ outer:
         available[available.length] = room;
     }
     
-    //If only one room available and we are on the search by room page
-    if (available.length == 1 && tabState == 1) {
-        openRequestForm( [ available[0].name ] );
-    }
-    
     //Add all available to list
+	roomTable.fnClearTable();
     for (var i = 0; i < available.length; i++) {
         var rm = available[i];
 		var fac = [];
@@ -173,11 +170,8 @@ outer:
 		if (rm.chalkboard) fac[fac.length] = "Chalkboard";
 		if (rm.wheelchair) fac[fac.length] = "Wheelchair Access";
 		if (fac.length < 1) fac[fac.length] = "None";
-		if(i%2==0)
-        $("#resultsBody").append('<tr class="resultsRow" id="even"><td>picture</td><td>'+rm.name+"</td><td>"+rm.building+"</td><td>"+rm.park+"</td><td>"+rm.capacity+"</td><td>"+rm.type+"</td><td>" + fac.join(", ") + "</td></tr>");
-		else
-		$("#resultsBody").append('<tr class="resultsRow" id="odd"><td>picture</td><td>'+rm.name+"</td><td>"+rm.building+"</td><td>"+rm.park+"</td><td>"+rm.capacity+"</td><td>"+rm.type+"</td><td>" + fac.join(", ") + "</td></tr>");
-
+		var img = '<div class="picture" style="background-image: url(http://www.lboro.ac.uk/service/fm/services/ts/roompics/'+rm.name+'.jpg)"><br /></div>';
+		roomTable.fnAddData(new Array(img, rm.name, rm.building, rm.park, rm.capacity, rm.type, fac.join(", ")));
     }
 	
 	//On click of results row
@@ -188,34 +182,103 @@ outer:
     
 }
 
-//Redirects to request page - takes an array of room names as input
-function openRequestForm(roomArr) {
+var rooms = new Array();
+var bookings = new Array();
 
-    //Sort out args
-    var args = [];
-    args[args.length] = [ "import", true ];
-    args[args.length] = [ "day", day ];
-    args[args.length] = [ "period", period ];
-    args[args.length] = [ "roomprefs", roomArr.join(",") ];
-    if (tabState == 0) {
-        args[args.length] = [ "park", $("#park_combobox").val() ];
-        args[args.length] = [ "type", $("#room_type_combobox").val() ];
-        if ($("#capacity_combobox").val() != "Any") args[args.length] = [ "students", $("#capacity_combobox").val() ];
-        if ($("#proj_check").attr('checked')) args[args.length] = [ "proj", true ];
-        if ($("#ohp_check").attr('checked')) args[args.length] = [ "ohp", true ];
-        if ($("#white_check").attr('checked')) args[args.length] = [ "white", true ];
-        if ($("#wheel_check").attr('checked')) args[args.length] = [ "wheel", true ];
-        if ($("#chalk_check").attr('checked')) args[args.length] = [ "chalk", true ];
-    }
-    
-    for (var i = 0; i < args.length; i++) args[i] = args[i].join("=");
-    window.location = "requests.html?" + args.join("&");
-        
-}
+var getRooms = function(){
+	$("#loadingOverlay").overlay({ 
+		top: 400,
+		mask: {
+			color: '#fff',
+			loadSpeed: 200,
+			opacity: 0.5
+		},
+		closeOnClick: false
+	});
+	$("#loadingOverlay").overlay().load();
+	
+			$.ajax({
+				type: "GET",
+				url: "index.php?page=roomavailability",
+				data: {"get" : "rooms" },
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				//async: false,
+									
+				success: function(data){
+					rooms = data;
+					getBookings();
+				},
+									
+				error: function(XMLHttpRequest, textStatus, errorThrown){
+					alert("error: "+textStatus+" ("+errorThrown+ ")");
+				}					
+		});
+};
+
+var getBookings = function(){
+	
+			$.ajax({
+				type: "GET",
+				url: "index.php?page=roomavailability",
+				data: {"get" : "bookings" },
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				//async: false,
+									
+				success: function(data){
+					bookings = data;
+					fillPage();
+					$('#search_area').show();
+					$("#loadingOverlay").overlay().close();
+				},
+									
+				error: function(XMLHttpRequest, textStatus, errorThrown){
+					alert("error: "+textStatus+" ("+errorThrown+ ")");
+				}					
+		});
+};
 
 $(document).ready(function(){
-                
-    //Register change events with the drawTable function
+
+	roomTable = $('#resultsTable').dataTable( {
+		"bJQueryUI": true,
+		"aaSorting": [[ 1, "asc" ]],
+		"bAutoWidth": true,
+		"bDeferRender": true,
+		"sScrollY": "240px",
+		"sDom": '<"H"Tfr>t<"F"i>S',
+		"bPaginate": false
+	} );
+	
+	$("#resultsTable tbody tr").live('click', function() {
+		$(this).toggleClass("roomSelected");
+	});
+	
+	$("#request_room_btn").live('click', function() {
+        if ($("#resultsTable .roomSelected").length == 0) {
+            alert('Please select a room to book!');
+			return;
+        }
+		var codes = new Array();
+		$("#resultsTable .roomSelected td:nth-child(2)").each(function() {
+			codes[codes.length] = $(this).html();
+		});
+		window.location = "index.php?page=requests&arooms=" + codes.join(",");
+	});
+	
+	$(".ui-autocomplete").live("click", function() { setTimeout("drawTable();", 200); });
+	
+	$('#search_area').hide();
+	getRooms(); //-> get bookings -> fill page
+	
+});
+
+var fillPage = function(){
+
+
+
+	//Register change events with the drawTable function
 	$("#proj_check").change(function() { drawTable(); });
 	$("#ohp_check").change(function() { drawTable(); });
 	$("#white_check").change(function() { drawTable(); });
@@ -259,126 +322,6 @@ $(document).ready(function(){
     
 	//Request button - redirects to request page and passes args through
 	$('#request_room_btn').button();
-    $('#request_room_btn').click(function() {
-        //Check if row is highlighted
-        if ($(".resultsTable").find("tr.resultsHighlighted").length == 0) {
-            alert('Please select a room to book!');
-        }
-        else {
-            var rmArr = [];
-            $("#resultsBody").find("tr.resultsHighlighted").each(function() {
-                rmArr[rmArr.length] = $(this).find("td:eq(0)").html();
-            });
-            openRequestForm(rmArr);
-        }
-    });
 	
-});
-
-(function( $ ) {
-		$.widget( "ui.combobox", {
-			_create: function() {
-				var self = this,
-					select = this.element.hide(),
-					selected = select.children( ":selected" ),
-					value = selected.val() ? selected.text() : "";
-				var input = this.input = $( "<input>" )
-					.insertAfter( select )
-					.val( value )
-					.autocomplete({
-						delay: 0,
-						minLength: 0,
-						source: function( request, response ) {
-							var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
-							response( select.children( "option" ).map(function() {
-								var text = $( this ).text();
-								if ( this.value && ( !request.term || matcher.test(text) ) )
-									return {
-										label: text.replace(
-											new RegExp(
-												"(?![^&;]+;)(?!<[^<>]*)(" +
-												$.ui.autocomplete.escapeRegex(request.term) +
-												")(?![^<>]*>)(?![^&;]+;)", "gi"
-											), "<strong>$1</strong>" ),
-										value: text,
-										option: this
-									};
-							}) );
-						},
-						select: function( event, ui ) {
-							ui.item.option.selected = true;
-							self._trigger( "selected", event, {
-								item: ui.item.option
-							});
-                            
-                            //Custom update shit for combo boxes
-                            if (tabState == 1 && $(select).attr('id') == "building_combobox") {
-                                updateRoomCombo();
-                            }
-                            drawTable();
-						},
-						change: function( event, ui ) {
-							if ( !ui.item ) {
-								var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
-									valid = false;
-								select.children( "option" ).each(function() {
-									if ( $( this ).text().match( matcher ) ) {
-										this.selected = valid = true;
-										return false;
-									}
-								});
-								if ( !valid ) {
-									// remove invalid value, as it didn't match anything
-									$( this ).val( "" );
-									select.val( "" );
-									input.data( "autocomplete" ).term = "";
-									return false;
-								}
-							}
-						}
-					})
-					.addClass( "ui-widget ui-widget-content ui-corner-left" );
-
-				input.data( "autocomplete" )._renderItem = function( ul, item ) {
-					return $( "<li></li>" )
-						.data( "item.autocomplete", item )
-						.append( "<a>" + item.label + "</a>" )
-						.appendTo( ul );
-				};
-
-				this.button = $( "<button type='button'>&nbsp;</button>" )
-					.attr( "tabIndex", -1 )
-					.attr( "title", "Show All Items" )
-					.insertAfter( input )
-					.button({
-						icons: {
-							primary: "ui-icon-triangle-1-s"
-						},
-						text: false
-					})
-					.removeClass( "ui-corner-all" )
-					.addClass( "ui-corner-right ui-button-icon" )
-					.click(function() {
-						// close if already visible
-						if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
-							input.autocomplete( "close" );
-							return;
-						}
-
-						// work around a bug (likely same cause as #5265)
-						$( this ).blur();
-
-						// pass empty string as value to search for, displaying all results
-						input.autocomplete( "search", "" );
-						input.focus();
-					});
-			},
-
-			destroy: function() {
-				this.input.remove();
-				this.button.remove();
-				this.element.show();
-				$.Widget.prototype.destroy.call( this );
-			}
-		});
-	})( jQuery );
+	
+};

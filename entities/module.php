@@ -64,7 +64,16 @@
         }
 		public function setLecturers($lecturers) {
 			$this->lecturers = $lecturers;
-		}		
+		}
+
+        /**
+         * Returns an assoc array representation of the module
+         */
+        public function getAsArray() {
+            $lecturers = array();
+			foreach ($this->lecturers as $lecturer) array_push($lecturers, get_object_vars($lecturer));
+            return array("id" => $this->id, "name" => $this->name, "code" => $this->code, "department" => get_object_vars($this->department), "lecturers" => $lecturers);
+        }
 		
 	}
 

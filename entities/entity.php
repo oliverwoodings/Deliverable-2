@@ -17,6 +17,10 @@
 			return $this->name;
 		}
 		
+		public function getAsArray() {
+			return array("id" => $this->id, "name" => $this->name);
+		}
+		
 	}
 	
 ?>

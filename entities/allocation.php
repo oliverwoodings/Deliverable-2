@@ -2,17 +2,27 @@
 
 	class Allocation {
 		
-		private $id;
 		private $request;
 		private $room;
 		private $period;
-		private $declined;
 		
-		/**
-		 * Saves the allocation to the database
-		 */
-		public function save() {
-			
+		public function __construct($request, $room, $period) {
+			$this->request = $request;
+			$this->room = $room;
+			$this->period = $period;
+		}
+		
+		public function getRequest() {
+			return $this->request;
+		}
+		public function getRoom() {
+			return $this->room;
+		}
+		public function getPeriod() {
+			return $this->period;
+		}
+		public function getDay() {
+			return $this->request->getDay();
 		}
 		
 	}

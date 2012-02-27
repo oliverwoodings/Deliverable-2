@@ -7,6 +7,12 @@
 .ui-button-icon-only .ui-button-text { padding: 0.35em; } 
 .ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }
 
+h1 {	
+	font-size: 16px;
+	font-weight: bold;
+	color: #222;
+}
+
 .req_label{
 	font-size:18px;
 	float:left;
@@ -21,9 +27,11 @@
 /* Row1 and associated fields */
 #row1
 {
-	width:920px;
+	width:898px;
 	float:left;
-	padding:5px 0px 5px 0px;
+	padding: 10px;
+	border: 1px solid #999;
+	border-radius: 4px;
 }
 
 #row1 #module_sect
@@ -32,21 +40,23 @@
 	margin:0px;
 	width:435px;
 	float:left;
+	border-radius: 3px;
 }
 
 .req_input{
-	height:30px;
+	line-height: 26px;
 	background-color:white;
+	border:1px solid #999;
+	border-radius: 1px;
 }
 
 .req_input:hover{
-	//border: 1px solid #F7CBDD;
-	background-color: #F7E1EA;
+	background-color: #F7EDFA;
 	border:1px solid grey;
 }
 
 #module_input{
-	width:200px;
+	width:347px;
 	float:left;
 	border:1px solid grey;
 	line-height:22px;
@@ -59,7 +69,7 @@
 }
 #mod_expand{
 	display:none;
-	width:300px;
+	width:430px;
 	height:100px;
 	background-color:white;;
 	margin-top:45px;
@@ -68,7 +78,7 @@
 }
 
 #mod_expand .mod_elm{
-	width:275px;
+	width:406px;
 	height:20px;
 	padding:2px 2px 2px 5px;
 	color:grey;
@@ -84,17 +94,30 @@
 	margin:0px;
 	overflow:hidden;
 }
+#mod_tag {
+	float: left;
+	margin-top: 5px;
+	margin-right: 10px;
+}
 
 #row1 #noStudents_sect
 {
 	padding:5px 0px 5px 5px;
 	margin:0px;
-	width:345px;
+	width:210px;
 	float:left;
+	border-radius: 3px;
+	margin-left: 20px;
+	height: 30px;
 }
 
-#noStud_input{
-	width:50px;
+#nostud_tag {
+	float: left;
+	margin-top: 5px;
+	margin-right: 10px;
+}
+#noStud_input {
+	float: left;
 }
 
 #row1 #priority_sect
@@ -103,25 +126,32 @@
 	margin:0px;
 	width:115px;
 	float:left;
+	margin-left: 60px;
+}
+#pri_div {
+	float: left;
+	margin-top: 6px;
+}
+#priority_tag {
+	float: left;
+	margin-right: 10px;
+	margin-top: 5px;
 }
 
-#priority_check{
-	float:left;
+#row2 {
+	padding: 10px;
+	border-radius: 4px;
+	border: 1px solid #999;
+	margin-top: 20px;
+	float: left;
+	width: 898px;
 }
 
-/* Row2 and associated fields */
-#row2
-{
-	width:920px;
-	height:150px;
-	float:left;
-}
-
-#row2 #facilities_sect
+#facilities_sect
 {
 	padding:0px 0px 0px 5px;
 	margin:0px;
-	width:455px;
+	width:439px;
 	float:left;
 }
 
@@ -130,6 +160,7 @@
 	/*border: 1px solid grey;*/
 	height:100px;
 	margin-top:5px;
+	margin-left: 40px;
 }
 
 #fac_expand{
@@ -142,11 +173,9 @@
 	display:block;
 	text-align:left;
 	margin:5px;
+	margin-bottom: 10px;
 }
-.fac_option input{
-	position:relative;
-	float:right;
-}
+
 
 #fac_done{
 	//display:none;
@@ -159,25 +188,35 @@
 }
 
 
-#row2 #special_sect
+#special_sect
 {
 	padding:0px;
 	margin:0px;
-	width:460px;
 	float:left;
+	margin-left: 20px;
+}
+
+#req_tag {
+	margin-top: 2px;
 }
 
 #spec_input{
 	font-family:inherit;
 	resize:none;
-	width:400px;
+	width:350px;
+	margin-left: 40px;
+	margin-top: 5px;
 }
 
 /* Row3 and associated fields */
 #row3
 {
-	width:920px;
+	width:898px;
 	float:left;
+	border: 1px solid #999;
+	padding: 10px;
+	border-radius: 4px;
+	margin-top: 20px;
 }
 
 #row3 #parkrtype_sect
@@ -196,6 +235,14 @@
 	width:455px;
 	float:left;
 }
+#park_input {
+	float: left;
+}
+#park_tag {
+	float: left;
+	margin-top: 5px;
+	margin-right: 20px;
+}
 #row3 #parkrtype_sect #roomty_sect
 {
 	padding:0px 0px 0px 5px;
@@ -203,12 +250,18 @@
 	width:455px;
 	float:left;
 }
-
+#room_type_input {
+	float: left;
+}
+#type_tag {
+	float: left;
+	margin-top: 5px;
+	margin-right: 20px;
+}
 #row3 #roomprefno_sect
 {
 	margin:0px;
 	width:920px;
-	height:40px;
 	float:left;
 }
 
@@ -224,16 +277,32 @@
 {
 	padding:5px 0px 5px 5px;
 	margin:0px;
-	width:455px;
+	width:330px;
 	float:left;
+	border-radius: 4px;
+}
+
+#noRooms_input {
+	width: 90px;
+	margin-left: 13px;
+	text-align: center;
+	font-weight: bold;
+}
+
+#room_type_input {
+	float: left;
+}
+#numroom_tag {
+	float: left;
+	margin-top: 5px;
+	margin-right: 10px;
 }
 
 #roompref_expand{
-	height:320px;
-	width:800px;
+	width:100%;
 	float:left;
-	margin-bottom:10px;
 	display:none;
+	margin-top: 10px;
 }
 
 #search_area{
@@ -242,73 +311,71 @@
 	margin-bottom:5px;
 }
 
+.popup {
+	margin-right: 40px;
+}
+
+#room_tag {
+	float: left;
+	margin-top: 7px;
+	margin-right: 10px;
+}
+
 #roompref_input{
-	width:200px;
+	width:230px;
 	float:left;
 	border:1px solid grey;
 	line-height:22px;
+	min-height: 30px;
 	text-align:left;
 	margin:0px 0px 0px 5px;
 	padding-left:3px;
 	padding-top:3px;
-	height: 25px;
 	display:block;
+	border-radius: 3px;
+	-webkit-user-modify: read-write;
+	word-wrap: break-word;
+	-webkit-nbsp-mode: space;
+	-webkit-line-break: after-white-space;
 }
-#adv_search{
-	margin-left:10px;
+#roompref_input .deletebutton {
+	top: 7px;
 }
-
-.resultsHighlighted {
-	background-color: #F4F0EF !important;
-}
-
-.resultsContainer {
-    height: 250px;
-    overflow: auto;
-    width: 800px;
-}
-.resultsTable {
-    font-size: 16px;
-    font-weight: bold;
-    font-style: normal;
-	border-collapse: collapse;
-}
-
-.resultsTable th {
-	padding: 5px;
-	background: #f5f7f9;
-	font-size: 14px;
-	color: #306;
-	border-bottom:1px solid black;
-}
-.resultsTable td {
-	text-align: center;
-	color: #666;
-	text-shadow: 1px 1px 1px #fff;
-	font-size: 13px;
-	font-weight: 400;
-	text-overflow: ellipsis;
-	cursor: pointer;
-}
-
-#even{
-	background: #e1dae8;
+#roompref_input .tag {
+	margin-bottom: 2px;
 }
 
 /* Row4 and associated fields */
 #row4
 {
 	width:920px;
-	height:350px;
 	float:left;
+	margin-top: 20px;
 }
 
 #row4 #length_sect
 {
-	padding:5px 0px 5px 5px;
+	padding: 8px;
 	margin:0px;
-	width:915px;
+	width:902px;
 	float:left;
+	border: 1px solid #999;
+	margin-bottom: -6px;
+	border-radius: 4px 4px 0px 0px;
+}
+#row4 #length_input, #length_tag {
+	float: right;
+}
+#length_tag {
+	font-size: 14px;
+	font-weight: 500;
+	margin-top: 7px;
+	margin-right: 10px;
+}
+#time_tag {
+	float: left;
+	margin-top: 6px;
+	margin-left: 5px;
 }
 
 #row4 #daytime_sect
@@ -323,23 +390,42 @@
 #row5
 {
 	width:920px;
-	height:60px;
 	float:left;
+	margin-top: 20px;
 }
 #weeks_sect{
-	padding:5px 0px 5px 5px;
+	padding: 15px;
+	border: 1px solid #999;
+	border-radius: 4px;
+}
+#wks {
+	margin-top: 10px;
+	height: 15px;
+	margin-left: 10px;
 }
 #week_boxes li{
 	display: inline;
 	list-style-type: none;
 	padding-right: 10px;
+	margin-right: 10px;
+	margin-top: 10px;
+}
+#week_boxes p {
+	display: inline;
+}
+#week_boxes p label {
+	margin-right: 20px;
+}
+#week_sel_sect {
+	margin-top: 10px;
+	margin-left: 10px;
 }
 
 #submit_sect{
 	width:920px;
-	height:50px;
 	float:left;
 	padding:5px 0px 0px 0px;
+	margin-top: 20px;
 }
 #subwrap{
 	margin-left:auto;
@@ -357,13 +443,17 @@
 	border:1px solid #e1dae8;
 	background-color:#f1eaf8;
 	border-radius:8px;
-	padding:5px;
-	/*margin:0px;*/
+	padding:1px;
 	margin-right:3px;
 	padding-right:10px;
 	cursor:pointer;
-	width:250px; /*only for fac*/
+}
+#module_input .tag {
 	margin-bottom:3px; /*only for fac*/
+	width:250px; /*only for fac*/
+}
+#roompref_input .tag {
+
 }
 .tag:hover{
 	border:1px solid #d0c9d7;
@@ -374,7 +464,7 @@
 	display:inline-block;
 	float:right;
 	right:-6px;
-	top:5px; /* -1 when not float right */
+	top:-8px; /* -1 when not float right */
 	width: 7px;
 	height: 7px;
 	font-size: 1px;
@@ -385,6 +475,7 @@
 	background-position: 7px; 
 	text-decoration: none; 
 }
+
 
 
 .tableCell_blue {
@@ -416,6 +507,10 @@
     line-height: 17px;
     opacity: 1;
 }
+
+.blocked{
+	background-color:lightgrey;
+}
 .td_content a {
     text-decoration: none;
     color: black;
@@ -429,7 +524,7 @@
 #daytime_sel_table{
     background: #f5f7f9;
 	width:100%;
-	border: 1px solid black;
+	border: 1px solid #999;
 	border-collapse: collapse;
     border-radius: 5px;
     -moz-border-radius: 5px;
@@ -450,13 +545,15 @@
 	color: black;
     font-size: 14px;
 	color: #306;
+	vertical-align: middle;
+	height: 30px;
 }
 
 #daytime_sel_table #days {
 	width:100px;
 }
 
-#daytime_sel_table #days th, td{
+#daytime_sel_table #days th, #daytime_sel_table #days td{
 	height:50px;
 }
 
@@ -474,4 +571,33 @@
 	background:rgba(162,205,90,0.6) !important;
 }
 
+#loadingOverlay {
+	display: none;
+	width: 220px;
+	text-align: center;
+	color: #222;
+	font-size: 16px;
+}
+
+/* Room table */
+.roomSelected td {
+	background-color: #BCADCA !important;
+}
+#rooms tbody tr {
+	cursor: pointer;
+	text-align: center;
+	height: 50px;
+}
+#rooms tbody td {
+	height: 50px;
+	vertical-align: middle;
+}
+#rooms .picture {
+	width: 40px;
+	height: 40px;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 2px;
+	background-size: 40px 40px;
+}
 

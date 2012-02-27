@@ -35,26 +35,38 @@
 }
 .circle h3{
 	position:relative;
-	top:10px;
-	//left:5px;
+	top:19px;
 	text-align:center;
 	text-decoration: none;
 	border:none !important;
-}	
+}
+.cleft {
+	margin-left: 0;
+}
+.cright {
+	margin-right: 0;
+}
 #line{
-	width:600px;
-	position: relative;
-	left: -70px;
-	top: -70px;
+	width: 98%;
+	position: absolute;
 	border:1px solid #e1dae8;//#330066;;
 	height:0px;
 	color: #330066;
 	border-style: dashed;
-	//opacity: 0.2;
+	top: 45px;
+}
+#timeline_container {
+	height: 130px;
 }
 #timeline{
-	margin-left:90px;
-	margin-bottom:20px;
+	float: left;
+	left: -50%;
+	position: relative;
+}
+#timeline_float {
+	float: left;
+	left: 50%;
+	position: relative;
 }
 
 
@@ -85,7 +97,7 @@
 
 #activity_feed #stream{
 	width:100%;
-	height:200px;
+	height:300px;
 	overflow-y: auto;
 	//border:2px solid #330066;
 	padding:0px;
@@ -141,7 +153,6 @@
 }
 
 #req_att_table th{
-	font-size:15px;
 	text-align:center;
 	padding:5px 0px 0px 0px;
 }
@@ -150,8 +161,27 @@
 }
 #req_att_table td {
 	cursor:pointer;
+	border-bottom: 1px solid #999;
+}
+#req_att_table .failed td {
+	background-color: rgba(255,106,106, 0.4);
+	border-bottom: 1px solid #555;
+}
+#req_att_table .failed {
+	background-color: rgba(255,106,106, 0.4);
+}
+#req_att_table .odd {
+	background-color: white;
+}
+#req_att_table .even {
+	background-color: white;
 }
 
 .tableHighlight {
 	background-color: #A2A4FF !important;
+}
+
+.fg-toolbar {
+	height: 10px;
+	border-radius: 0 0 2px 2px;
 }

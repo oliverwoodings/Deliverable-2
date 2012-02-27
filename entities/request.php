@@ -2,39 +2,81 @@
 
 	class Request {
 		
-		protected $id = 0;
-		protected $round = 0;
-		protected $status = 0;
+		protected $id;
+		protected $round;
+		protected $status;
 		protected $module;
-		protected $roomtype;
-		protected $building;
+		protected $roomType;
 		protected $rooms = array();
 		protected $park;
-		protected $period = 0;
-		protected $day = 0;
+		protected $period;
+		protected $day;
 		protected $weeks = array();
-		protected $length = 0;
-		protected $numStudents = 0;
+		protected $length;
+		protected $numStudents;
+		protected $numRooms;
 		protected $priority = false;
-		protected $specReq = "";
+		protected $specReq;
+		protected $facilities = array();
 		
 		/**
-		 * Saves the request to the database
+		 * Id
 		 */
-		public function save() {
-			
+		public function getId() {
+			return $this->id;
+		}
+		public function setId($id) {
+			$this->id = $id;
 		}
 		
+		/**
+		 * Round
+		 */
+		public function getRound() {
+			return $this->round;
+		}
+		public function setRound($round) {
+			$this->round = $round;
+		}
 		
+		/**
+		 * Status
+		 */
+		public function getStatus() {
+			return $this->status;
+		}
+		public function setStatus($status) {
+			$this->status = $status;
+		}
+		
+		/**
+		 * Module
+		 */
+		public function getModule() {
+			return $this->module;
+		}
+		public function setModule($module) {
+			$this->module = $module;
+		}
+		
+		/**
+		 * RoomType
+		 */
+		public function getRoomType() {
+			return $this->roomType;
+		}
+		public function setRoomType($roomType) {
+			$this->roomType = $roomType;
+		}
 		
 		/**
 		 * Rooms
 		 */
 		public function getRooms() {
-			return $this->numRooms;
+			return $this->rooms;
 		}
-		public function addRooms($room) {
-			array_push($this->numRooms, $room);
+		public function addRoom($room) {
+			array_push($this->rooms, $room);
 		}
 		public function setRooms($rooms) {
 			$this->rooms = $rooms;
@@ -94,10 +136,10 @@
 		 * Num Rooms
 		 */
 		public function getNumRooms() {
-			return $this->period;
+			return $this->numRooms;
 		}
-		public function setNumRooms($period) {
-			$this->period = $period;
+		public function setNumRooms($numRooms) {
+			$this->numRooms = $numRooms;
 		}
 		
 		/**
@@ -108,6 +150,16 @@
 		}
 		public function setNumStudents($numStudents) {
 			$this->numStudents = $numStudents;
+		}
+		
+		/**
+		 * Facilties
+		 */
+		public function getFacilities() {
+			return $this->facilities;
+		}
+		public function setFacilities($facilities) {
+			$this->facilities = $facilities;
 		}
 		
 		/**
@@ -129,6 +181,7 @@
 		public function setSpecReq($req) {
 			$this->specReq = $req;
 		}
+	
 		
 	}
 

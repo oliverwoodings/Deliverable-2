@@ -72,7 +72,7 @@
 									<?php
 										$departments = $parent->db->getDepartments();
 										foreach ($departments as $department) {
-											echo "<option>" . $department . "</option>";
+											echo "<option>" . $department->getName() . "</option>";
 										}
 									?>
 								</select>

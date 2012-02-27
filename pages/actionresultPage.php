@@ -17,6 +17,9 @@
 				case 2;
 					echo "You are already logged in.";
 					break;
+				case 3:
+					echo "Semester changed.";
+					break;
 			}
 			echo " Redirecting to index page...";
 			$parent->displayFooter();

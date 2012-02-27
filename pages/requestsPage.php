@@ -6,162 +6,315 @@
 			
 			$parent->auth->requireLogin();
 			
+			if (isset($parent->get)) {
+			
+				switch ($parent->get) {
+					//Update available request data
+					case "update":
+					
+						//Create search object and fill with data from get headers
+						$search = new Search();
+						if (isset($_GET["module_id"]) && strlen($_GET["module_id"]) > 0) $search->module = $parent->db->getModuleById($_GET["module_id"]);
+						if (isset($_GET["num_students"]) && strlen($_GET["num_students"]) > 0) $search->numStudents = $_GET["num_students"];
+						if (isset($_GET["facilities"]) && strlen($_GET["facilities"]) > 0) {
+							$arr = json_decode($_GET["facilities"]);
+							$facArr = array();
+							foreach ($arr as $fac) $facArr[] = $parent->db->getFacilityById($fac);
+							$search->facilities = $facArr;
+						}
+						if (isset($_GET["park"]) && strlen($_GET["park"]) > 0) $search->park = $parent->db->getParkById($_GET["park"]);
+						if (isset($_GET["rooms"]) && strlen($_GET["rooms"]) > 0) {
+							$arr = json_decode($_GET["rooms"]);
+							$rmArr = array();
+							foreach ($arr as $room) $rmArr[] = $parent->db->getRoomByCode($room);
+							$search->rooms = $rmArr;
+						}
+						if (isset($_GET["length"]) && strlen($_GET["length"]) > 0) $search->length = $_GET["length"];
+						if (isset($_GET["room_type"]) && strlen($_GET["room_type"]) > 0) $search->roomType = $parent->db->getRoomTypeById($_GET["room_type"]);
+						if (isset($_GET["weeks"]) && strlen($_GET["weeks"]) > 0) $search->weeks = json_decode($_GET["weeks"]);
+						if (isset($_GET["day"]) && strlen($_GET["day"]) > 0) $search->day = $_GET["day"];
+						if (isset($_GET["period"]) && strlen($_GET["period"]) > 0) $search->period = $_GET["period"];
+						if (isset($_GET["num_rooms"]) && strlen($_GET["num_rooms"]) > 0) $search->numRooms = $_GET["num_rooms"];
+						else $search->numRooms = 1;
+						
+						//Retrieve matching data
+						$data = $search->getAvailableRequestData($parent->db);
+						
+                        //Format into JSON-parsable array
+						$returnData = array();
+						$returnData["modules"] = array();
+						foreach ($data["modules"] as $module) {
+							$returnData["modules"][] = $module->getAsArray(); //Modules
+						}
+                        $returnData["numStudents"] = (isset($_GET["num_students"])?$_GET["num_students"]:0);
+						$returnData["capacity"] = 0;
+                        $returnData["rooms"] = array(); 
+                        $returnData["parks"] = array();
+                        $returnData["roomTypes"] = array();
+                        $returnData["facilities"] = array();
+                        foreach ($data["rooms"] as $room) {
+                            $returnData["rooms"][] = $room->getAsArray(); //Rooms
+                            if (!in_array(get_object_vars($room->getBuilding()->getPark()), $returnData["parks"]))
+                                $returnData["parks"][] = get_object_vars($room->getBuilding()->getPark()); //Parks
+                            if (!in_array(get_object_vars($room->getType()), $returnData["roomTypes"]))
+                                $returnData["roomTypes"][] = get_object_vars($room->getType()); //Room types
+                            foreach ($room->getFacilities() as $facility) {
+                                if (!in_array(get_object_vars($facility), $returnData["facilities"]))
+                                    $returnData["facilities"][$facility->getId()] = get_object_vars($facility); //Facilities
+                            }
+							if ($room->getCapacity() > $returnData["capacity"]) $returnData["capacity"] = $room->getCapacity();
+                        }
+						$returnData["time"] = $data["time"];
+						
+                        //Echo JSON
+                        echo json_encode($returnData);
+                        
+						break;
+						
+					case "submit":
+						
+						//If we are editing
+						if (isset($_GET["editid"]) && $parent->db->getRequestById($_GET["editid"])) {
+							$request = $parent->db->getRequestById($_GET["editid"]);
+							
+						} else {
+							$request = new Request();
+						}						
+						
+						//Set request data
+						$request->setRound($parent->db->getActiveRound());
+						$request->setStatus($parent->db->getStatusByName("pending"));
+						$request->setModule($parent->db->getModuleById($_GET["module_id"]));
+						if (isset($_GET["room_type"])) $request->setRoomType($parent->db->getRoomTypeById($_GET["room_type"]));
+						$request->setRooms(array());
+						if (isset($_GET["rooms"])) foreach (json_decode($_GET["rooms"]) as $room) $request->addRoom($parent->db->getRoomByCode($room));
+						if (isset($_GET["park"])) $request->setPark($parent->db->getParkById($_GET["park"]));
+						$request->setPeriod($_GET["period"]);
+						$request->setDay($_GET["day"]);
+						$weeks = array_fill(0, 15, false);
+						foreach (json_decode($_GET["weeks"]) as $week) $weeks[$week -1] = true;
+						$request->setWeeks($weeks);
+						$request->setLength($_GET["length"]);
+						$request->setNumStudents($_GET["num_students"]);
+						if (isset($_GET["num_rooms"])) $request->setNumRooms($_GET["num_rooms"]);
+						$request->setPriority(($request->getRound()->getName() == "P"?true:str_replace(array(0,1), array(false, true), $_GET["priority"])));
+						if (isset($_GET["spec_req"])) $request->setSpecReq($_GET["spec_req"]);
+						if (isset($_GET["facilities"]) && strlen($_GET["facilities"]) > 0) {
+							$arr = json_decode($_GET["facilities"]);
+							$facArr = array();
+							foreach ($arr as $fac) $facArr[] = $parent->db->getFacilityById($fac);
+							$request->setFacilities($facArr);
+						}
+						
+						//If adhoc, allocate straight away
+						if ($request->getRound()->getName() == "A") {
+							
+							//Save request
+							$request->setStatus($parent->db->getStatusByName("Allocated"));
+							$request->setId($parent->db->saveRequest($request));
+						
+							//Sort out rooms
+							$search = new Search();
+							$search->module = $request->getModule();
+							$search->numStudents = $request->getNumStudents();
+							if ($request->getFacilities() != null) $search->facilities = $request->getFacilities();
+							if ($request->getPark() != null) $search->park = $request->getPark();
+							$search->length = $request->getLength();
+							if ($request->getRoomType() != null) $search->roomType = $request->getRoomType();
+							$search->weeks = $request->getWeeks();
+							$search->day = $request->getDay();
+							$search->period = $request->getPeriod();
+							$search->numRooms = $request->getNumRooms();
+							$data = $search->getAvailableRequestData($parent->db);
+							for ($i = count($request->getRooms()); $i < $request->getNumRooms(); $i++) $request->addRoom($data["rooms"][$i]);
+							
+							//Add allocations
+							$rooms = $request->getRooms();
+							for ($i = 0; $i < $request->getLength(); $i++) {
+								for ($j = 0; $j < $request->getNumRooms(); $j++) {
+									$parent->db->addAllocation(new Allocation($request, $rooms[$j], $request->getPeriod() + $i));
+								}
+							}
+							
+						}
+						//Otherwise just save the request
+						else {
+							$parent->db->saveRequest($request);
+						}
+						
+						$parent->db->addHistory("Request Added", $request->getModule()->getCode() . ", " . str_replace(array(1,2,3,4,5), array("Mon", "Tue", "Wed", "Thur", "Fri"), $request->getDay()) . ", Period " . $request->getPeriod());
+	
+						break;
+						
+					case "loadid":
+						
+						//Validation check
+						if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) return $parent->errorJSON(array(), "Invalid ID!");
+						$request = $parent->db->getRequestById($_GET["id"]);
+						if (!$request || ($request->getStatus()->getName() != "Pending" && $request->getStatus()->getName() != "Declined" && $request->getStatus()->getName() != "Failed")) return $parent->errorJSON(array(), "Invalid ID!");
+						
+						//Form array out of request
+						$facs = array();
+						foreach ($request->getFacilities() as $fac) $facs[] = $fac->getId();
+						$rooms = array();
+						foreach ($request->getRooms() as $room) $rooms[] = $room->getAsArray();
+						$return = array();
+						$return["id"] = $request->getId();
+						$return["day"] = $request->getDay();
+						$return["period"] = $request->getPeriod();
+						$return["module"] = $request->getModule()->getAsArray();
+						$return["priority"] = $request->getPriority();
+						$return["numRooms"] = $request->getNumRooms();
+						$return["numStudents"] = $request->getNumStudents();
+						$return["weeks"] = $request->getWeeks();
+						$return["length"] = $request->getLength();
+						if (count($facs) > 0) $return["facilities"] = $facs;
+						if ($request->getPark() != null) $return["park"] = $request->getPark()->getAsArray();
+						if ($request->getRoomType() != null) $return["roomType"] = $request->getRoomType()->getAsArray();
+						if (count($rooms) > 0) $return["rooms"] = $rooms;
+						echo json_encode($return);
+						
+						break;
+						
+				}
+                
+                return;
+			
+			}
+			
 			$parent->title = "Requests";
 			$parent->displayHeader();
 			
 			?>
-			<div id="row1">
-				<div id="module_sect" class="mand">
-					<div id="modline"><span class="req_label" >Module: </span>
-					<div id="module_input" contenteditable="true" class="req_input" /></div>
-					</div>
-					<div id="mod_expand"/>
-						<div id="coa123" class="mod_elm" >
-							<p>C0A123 - Essential Skills for Computing</p>
-						</div>
-						<div id="coa124" class="mod_elm" >
-							<p>C0A123 - Essential Skills for Computing</p>
-						</div>
-						<div id="coa125" class="mod_elm" >
-							<p>C0A123 - Essential Skills for Computing</p>
-						</div>
-						<div id="coa126" class="mod_elm" >
-							<p>C0A123 - Essential Skills for Computing</p>
-						</div>
-						<div id="coa127" class="mod_elm" >
-							<p>C0A123 - Essential Skills for Computing</p>
-						</div>
-						<div id="coa128" class="mod_elm" >
-							<p>C0A123 - Essential Skills for Computing</p>
-						</div>
-					</div>
-				</div>
-				<div id="noStudents_sect" class="mand">
-					<label for="noStud_input" class="req_label" >No. Students: </label>
-					<input type="text" id="noStud_input" class="req_input"/>
-				</div>
-				<div id="priority_sect">
-					<label class="req_label">Priority</label>
-					<input type="checkbox" id="priority_check" /><label for="priority_check">P</label>
-				</div>
+			<div id="loadingOverlay">
+				<img src="images/loading-bar.gif" />
+				Loading Data...
 			</div>
+			<div id="row1">
+				<div>
+					<div id="module_sect" class="mand">
+						<div id="modline">
+							<div id="mod_tag"><h1>Module: </h1></div>
+							<div id="module_input" contenteditable="true" class="req_input" /></div>
+						</div>
+						<div id="mod_expand"/>
+						</div>
+					</div>
+					<div id="noStudents_sect">
+						<div id="nostud_tag"><h1>No. Students: </h1></div>
+						<div class="ui-widget" id="noStud_input">
+							<select id="noStud_select" class="req_select" >
+							</select>
+						</div>
+					</div>
+					<div id="priority_sect">
+						<div id="priority_tag"><h1>Priority: <h1></div>
+						<div id="pri_div">
+							<p>
+								<input type="checkbox" id="priority_check" />
+								<label for="priority_check"></label>
+							</p>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+				
 			<!-- Facilities, Special Requirments -->
 			<div id="row2">
 				<div id="facilities_sect">
-					<label for="fac_edit" class="req_label">Facilities</label>
-					<input type="button" id="fac_edit" class="std_but" value="Edit" />
-					<input type="button" id="fac_done" class="std_but" value="Done" />
-					<div id="fac_area">
-					<div id="fac_details"> 
-						
-					</div>
-					<div id="fac_expand"> 
+					<h1>Facilities: </h1>
+					<div id="fac_area"> 
 						<div class="fac_option">
-						<label>Data Projector</label>
-						<input type="checkbox" id="proj_check" />
+							<p>
+								<input type="checkbox" id="2_check" />
+								<label for="2_check">Data Projector</label>
+							</p>
 						</div>
 						<div class="fac_option">
-							<label>OHP</label>
-							<input type="checkbox" id="ohp_check" />
+							<p>
+								<input type="checkbox" id="1_check" />
+								<label for="1_check">OHP</label>
+							</p>
 						</div>
 						<div class="fac_option">
-							<label>Whiteboard</label>
-							<input type="checkbox" id="white_check" />
+							<p>
+								<input type="checkbox" id="5_check" />
+								<label for="5_check">Whiteboard</label>
+							</p>
 						</div>
 						<div class="fac_option">
-							<label>Chalkboard</label>
-							<input type="checkbox" id="chalk_check" />
+							<p>
+								<input type="checkbox" id="4_check" />
+								<label for="4check">Chalkboard</label>
+							</p>
 						</div>
 						<div class="fac_option">
-							<label>Wheelchair Access</label>
-							<input type="checkbox" id="wheel_check" />
+							<p>
+								<input type="checkbox" id="3_check" />
+								<label for="3_check">Wheelchair Access</label>
+							</p>
 						</div>
-					</div>
 					</div>
 				</div>
 				<div id="special_sect">
-					<label for="spec_input" class="req_label">Sepecial Requirments</label>
-					<textarea id="spec_input" rows="7"></textarea>
+					<div id="req_tag"><h1>Special Requirements: </h1></div>
+					<textarea id="spec_input" rows="5"></textarea>
 				</div>
 			</div>
+				
+
 			<!-- Park, Room Type, Room Preference, no.Rooms -->
 			<div id="row3">
 				<div id="parkrtype_sect">
 					<div id="park_sect">
-						<label class="req_label">Park: </label>
+						<div id="park_tag"><h1>Park: </h1></div>
 						<div class="ui-widget" id="park_input">
-						<select id="park_select" class="req_select" >
-							<option value="Any">Any</option>
-							<option value="Central">Central</option>
-							<option value="East">East</option>
-							<option value="West">West</option>	
-						</select>
+							<select id="park_select" class="req_select" >
+							</select>
 						</div>
 					</div>
 					<div id="roomty_sect">
-						<label class="req_label">Room Type: </label>
+						<div id="type_tag"><h1>Room Type: </h1></div>
 						<div class="ui-widget" id="room_type_input">
 							<select id="roomty_select" class="req_select" >
-								<option value="Any">Any</option>
-								<option value="Traditional">Traditional</option>
-								<option value="Seminar">Seminar</option>
-								<!--<option value="Lab">Lab</option>-->
 							</select>
 						</div>
 					</div>
 				</div>
 				<div id="roomprefno_sect">
 					<div id="roompref_sect">
-						<label for="roompref_input" class="req_label">Room Preference</label>
+						<div id="room_tag"><h1>Room Preference: </h1></div>
 						<div id="roompref_input" contenteditable="true" class="req_input" /></div>
 					</div>
-					<div id="noRooms_sect" class="mand">
-						<label for="noRooms_input" class="req_label">No. Rooms</label>
-						<input type="text" id="noRooms_input" class="req_input" />
+					<div id="noRooms_sect">
+						<div id="numroom_tag"><h1>No. Rooms: </h1></div>
+						<input type="text" id="noRooms_input" class="req_input" value='1' />
 					</div>
 				</div>
 				<div id="roompref_expand" >
-					<!-- Room Preference will expand in here -->
-						<div id="search_area">
-							<span style="float:left;">Search: </span><input type="text" id="search_input" class="req_input" style="float:left;"/>
-							<span style="float:left;margin-left:10px;">By: </span> 
-							<div class="ui-widget" id="search_by_input">
-							<select id="search_by_select" class="req_select" style="float:left;">
-								<option value="allFields">All Fields</option>
-								<option value="Room">Room</option>
-								<option value="Building">Building</option>
-								<option value="Park">Park</option>
-								<option value="Capacity">Capacity</option>
-								<option value="Room Type">Room Type</option>
-								<option value="Facilities">Facilities</option>
-							</select>
-							<input type="button" id="adv_search" class="std_but" value="Advanced Search" />
-						</div>
-						</div>
-                        <div class="resultsContainer">
-                            <table class="resultsTable">
-                                <thead>
-                                    <tr>
-										<th>Picture</th>
-                                        <th>Room</th>
-                                        <th>Building</th>
-                                        <th width="50px">Park</th>
-                                        <th width="60px">Capacity</th>
-                                        <th width="80px">Room Type</th>
-                                        <th>Facilities</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="resultsBody">
-                                <tr class="resultsRow" id="even"><td>picture</td><td>JJ017</td><td>Ann Packer</td><td>East</td><td>16</td><td>Seminar</td><td>OHP, Whiteboard, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>K103</td><td>Herbert Manzoni</td><td>Central</td><td>13</td><td>Seminar</td><td>Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>S175</td><td>S Building</td><td>West</td><td>10</td><td>Seminar</td><td>OHP, Whiteboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>W05E</td><td>Sir David Davies</td><td>West</td><td>10</td><td>Seminar</td><td>Whiteboard, Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>W05F</td><td>Sir David Davies</td><td>West</td><td>8</td><td>Seminar</td><td>Whiteboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>CC011</td><td>James France</td><td>Central</td><td>256</td><td>Traditional</td><td>Projector, OHP, Whiteboard, Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>Cope</td><td>Cope Auditorium</td><td>East</td><td>226</td><td>Traditional</td><td>Projector, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>U020</td><td>Brockington Extension</td><td>Central</td><td>218</td><td>Traditional</td><td>Projector, OHP, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>CC012</td><td>James France</td><td>Central</td><td>218</td><td>Traditional</td><td>Projector, OHP, Whiteboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>CC013</td><td>James France</td><td>Central</td><td>176</td><td>Traditional</td><td>Projector, OHP, Whiteboard, Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>J104</td><td>EHB</td><td>Central</td><td>153</td><td>Traditional</td><td>Projector, OHP, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>RT008</td><td>Sir Frank Gibb</td><td>West</td><td>148</td><td>Traditional</td><td>Projector, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>W001</td><td>Sir David Davies</td><td>West</td><td>134</td><td>Traditional</td><td>Projector, OHP, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>B009</td><td>Brockington</td><td>Central</td><td>110</td><td>Traditional</td><td>OHP, Whiteboard, Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>J002</td><td>EHB</td><td>Central</td><td>105</td><td>Traditional</td><td>Projector, OHP, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>A001</td><td>Schofield</td><td>Central</td><td>101</td><td>Traditional</td><td>Projector, OHP, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>JB021</td><td>Sir John Beckwith Centre for Sport</td><td>East</td><td>100</td><td>Traditional</td><td>Projector, OHP, Whiteboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>XX019</td><td>Bridgeman Centre</td><td>Central</td><td>100</td><td>Traditional</td><td>Projector, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>S004</td><td>S Building</td><td>West</td><td>98</td><td>Traditional</td><td>Projector, OHP, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>A201</td><td>Schofield</td><td>Central</td><td>95</td><td>Traditional</td><td>Projector, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>JJ004</td><td>Ann Packer</td><td>East</td><td>90</td><td>Traditional</td><td>Whiteboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>W004</td><td>Sir David Davies</td><td>West</td><td>84</td><td>Traditional</td><td>Projector, OHP, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>B111</td><td>Brockington</td><td>Central</td><td>80</td><td>Traditional</td><td>Projector, OHP, Whiteboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>RT005</td><td>Sir Frank Gibb</td><td>West</td><td>75</td><td>Traditional</td><td>OHP, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>RT011</td><td>Sir Frank Gibb</td><td>West</td><td>72</td><td>Traditional</td><td>Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>RT023</td><td>Sir Frank Gibb</td><td>West</td><td>72</td><td>Traditional</td><td>Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>W003</td><td>Sir David Davies</td><td>West</td><td>69</td><td>Traditional</td><td>Projector, OHP, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>ZZ106</td><td>Matthew Arnold</td><td>East</td><td>64</td><td>Traditional</td><td>OHP, Whiteboard, Chalkboard</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>U011</td><td>Brockington Extension</td><td>Central</td><td>60</td><td>Traditional</td><td>OHP, Whiteboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>X401</td><td>Pilkington Library</td><td>West</td><td>60</td><td>Traditional</td><td>Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>S174</td><td>S Building</td><td>West</td><td>53</td><td>Traditional</td><td>OHP, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>A203</td><td>Schofield</td><td>Central</td><td>50</td><td>Traditional</td><td>Projector, OHP, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>D002</td><td>James France</td><td>Central</td><td>50</td><td>Traditional</td><td>Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>D102</td><td>James France</td><td>Central</td><td>50</td><td>Traditional</td><td>OHP, Whiteboard, Chalkboard</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>D109</td><td>James France</td><td>Central</td><td>50</td><td>Traditional</td><td>OHP, Whiteboard, Chalkboard</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>D201</td><td>James France</td><td>Central</td><td>50</td><td>Traditional</td><td>OHP, Whiteboard, Chalkboard</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>D202</td><td>James France</td><td>Central</td><td>50</td><td>Traditional</td><td>OHP, Whiteboard, Chalkboard</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>JJ010</td><td>Ann Packer</td><td>East</td><td>50</td><td>Traditional</td><td>OHP, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>S173</td><td>S Building</td><td>West</td><td>50</td><td>Traditional</td><td>OHP, Chalkboard, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>N004</td><td>Haslegrave</td><td>Central</td><td>50</td><td>Lab</td><td>Projector, Wheelchair Access</td></tr><tr class="resultsRow" id="even"><td>picture</td><td>N006</td><td>Haslegrave</td><td>Central</td><td>60</td><td>Lab</td><td>Projector, Wheelchair Access</td></tr><tr class="resultsRow" id="odd"><td>picture</td><td>N005</td><td>Haslegrave</td><td>Central</td><td>90</td><td>Lab</td><td>Projector, Wheelchair Access</td></tr></tbody>
-                            </table>
-                        </div>
-                        <input type="button" id="room_done" class="std_but" value="Done" style="float:right;"/>
+					<table cellpadding="0" cellspacing="0" border="0" class="display" id="rooms">
+						<thead>
+							<tr>
+								<th>Picture</th>
+								<th>Room</th>
+								<th>Building</th>
+								<th>Park</th>
+								<th>Capacity</th>
+								<th>Room Type</th>
+								<th>Facilities</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+                    <input type="button" id="room_done" class="std_but" value="Close" style="float:right;"/>
 				</div>
 			</div>
 			<!-- Length, Day, Time -->
 			<div id="row4">
-				<div id="length_sect">
-					<label for="length_select" class="req_label">Length: </label>
+				<div id="length_sect" class="mand">
+					<div id="time_tag"><h1>Time: </h1></div>
 					<div class="ui-widget" id="length_input">
 						<select id="length_select" class="req_select">
 							<option value="1" selected="selected">1</option>
@@ -171,6 +324,7 @@
 							<!-- More options here -->
 						</select>
 					</div>
+					<div id="length_tag">Length: </div>
 				</div>
 				<div id="daytime_sect" class="mand">
 					<!-- needs changing to request page shit -->
@@ -178,7 +332,7 @@
 						<colgroup id="days" span="1"></colgroup>
 						<thead>
 							<tr>
-								<th><h1>Day/Period</h1></th>
+								<th><h1></h1></th>
 								<th>9:00</th>
 								<th>10:00</th>
 								<th>11:00</th>
@@ -257,38 +411,39 @@
 			<!-- Weeks -->
 			<div id="row5">
 				<div id="weeks_sect">
-					<label class="req_label">Weeks</label>
-					<ul id="week_boxes">
-						<li>1<input type="checkbox" name="week" value="1" checked="checked"/></li>
-						<li>2<input type="checkbox" name="week" value="2" checked="checked"/></li>
-						<li>3<input type="checkbox" name="week" value="3" checked="checked"/></li>
-						<li>4<input type="checkbox" name="week" value="4" checked="checked"/></li>
-						<li>5<input type="checkbox" name="week" value="5" checked="checked"/></li>
-						<li>6<input type="checkbox" name="week" value="6" checked="checked"/></li>
-						<li>7<input type="checkbox" name="week" value="7" checked="checked"/></li>
-						<li>8<input type="checkbox" name="week" value="8" checked="checked"/></li>
-						<li>9<input type="checkbox" name="week" value="9" checked="checked"/></li>
-						<li>10<input type="checkbox" name="week" value="10" checked="checked"/></li>
-						<li>11<input type="checkbox" name="week" value="11" checked="checked"/></li>
-						<li>12<input type="checkbox" name="week" value="12" checked="checked"/></li>
-						<li>13<input type="checkbox" name="week" value="13" /></li>
-						<li>14<input type="checkbox" name="week" value="14" /></li>
-						<li>15<input type="checkbox" name="week" value="15" /></li>
-					</ul>
+					<h1>Weeks:</h1>
+					<div id="wks">
+						<ul id="week_boxes">
+							<li><p><input id="wkcheck_1" type="checkbox" name="week" value="1" checked="checked"/><label for="wkcheck_1">1</label></p></li>
+							<li><p><input id="wkcheck_2" type="checkbox" name="week" value="2" checked="checked"/><label for="wkcheck_2">2</label></p></li>
+							<li><p><input id="wkcheck_3" type="checkbox" name="week" value="3" checked="checked"/><label for="wkcheck_3">3</label></p></li>
+							<li><p><input id="wkcheck_4" type="checkbox" name="week" value="4" checked="checked"/><label for="wkcheck_4">4</label></p></li>
+							<li><p><input id="wkcheck_5" type="checkbox" name="week" value="5" checked="checked"/><label for="wkcheck_5">5</label></p></li>
+							<li><p><input id="wkcheck_6" type="checkbox" name="week" value="6" checked="checked"/><label for="wkcheck_6">6</label></p></li>
+							<li><p><input id="wkcheck_7" type="checkbox" name="week" value="7" checked="checked"/><label for="wkcheck_7">7</label></p></li>
+							<li><p><input id="wkcheck_8" type="checkbox" name="week" value="8" checked="checked"/><label for="wkcheck_8">8</label></p></li>
+							<li><p><input id="wkcheck_9" type="checkbox" name="week" value="9" checked="checked"/><label for="wkcheck_9">9</label></p></li>
+							<li><p><input id="wkcheck_10" type="checkbox" name="week" value="10" checked="checked"/><label for="wkcheck_10">10</label></p></li>
+							<li><p><input id="wkcheck_11" type="checkbox" name="week" value="11" checked="checked"/><label for="wkcheck_11">11</label></p></li>
+							<li><p><input id="wkcheck_12" type="checkbox" name="week" value="12" checked="checked"/><label for="wkcheck_12">12</label></p></li>
+							<li><p><input id="wkcheck_13" type="checkbox" name="week" value="13" /><label for="wkcheck_13">13</label></p></li>
+							<li><p><input id="wkcheck_14" type="checkbox" name="week" value="14" /><label for="wkcheck_14">14</label></p></li>
+							<li><p><input id="wkcheck_15" type="checkbox" name="week" value="15" /><label for="wkcheck_15">15</label></p></li>
+						</ul>
+					</div>
 					<div id="week_sel_sect">
-					<label class="req_label">Select</label>
-					<input type="button" id="week_all" class="std_but" value="All" />
-					<input type="button" id="week_term" class="std_but" value="1 - 12" />
-					<input type="button" id="week_odd" class="std_but" value="Odd" />
-					<input type="button" id="week_even" class="std_but" value="Even" />
-					<input type="button" id="week_none" class="std_but" value="None" />
-				</div>
+						<input type="button" id="week_all" class="std_but" value="All" />
+						<input type="button" id="week_term" class="std_but" value="1 - 12" />
+						<input type="button" id="week_odd" class="std_but" value="Odd" />
+						<input type="button" id="week_even" class="std_but" value="Even" />
+						<input type="button" id="week_none" class="std_but" value="None" />
+					</div>
 				</div>
 			</div>
 			<!--SUBMISSION -->
 			<div id="submit_sect">
 				<div id="subwrap">
-				<input type="button" id="submit" class="std_but" value="Submit" />
+				<input type="button" id="submit" class="std_but" value="<?php if (isset($_GET["edit"])) echo "Edit"; else echo "Submit"; ?>" />
 				</div>
 			</div>
 			

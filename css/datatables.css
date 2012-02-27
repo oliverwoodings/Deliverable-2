@@ -327,7 +327,7 @@ table.display tr.odd.row_selected td {
  */
 /* For the standard odd/even */
 tr.odd td.sorting_1 {
-	background-color: #FFFFFF;
+	/* background-color: #FFFFFF; - Taken out to make Urgent Notif work */
 }
 
 tr.odd td.sorting_2 {
@@ -339,7 +339,7 @@ tr.odd td.sorting_3 {
 }
 
 tr.even td.sorting_1 {
-	background-color: #e1dae8;
+	/* background-color: #e1dae8; - Taken out to make Urgent Notif work */
 }
 
 tr.even td.sorting_2 {

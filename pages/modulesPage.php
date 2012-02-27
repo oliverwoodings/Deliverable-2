@@ -13,9 +13,7 @@
 					case "all":
 						$modules = array();
 						foreach($parent->db->getModules() as $module) {
-							$lecturers = array();
-							foreach ($module->getLecturers() as $lecturer) array_push($lecturers, get_object_vars($lecturer));
-							array_push($modules, array("id" => $module->getId(), "name" => $module->getName(), "code" => $module->getCode(), "department" => get_object_vars($module->getDepartment()), "lecturers" =>  $lecturers));
+							array_push($modules, $module->getAsArray());
 						}
 						echo json_encode($modules);
 						break;
@@ -111,7 +109,6 @@
 				<a id="edit_module" rel="#editModuleOverlay" class="module_action">Edit Module</a>
 				<a id="remove_module" class="module_action">Remove Module</a>
 				<div id="confirm" style="display:none;">Are you sure? <a id="yes" >Yes</a>/<a id="no">No</a></div>
-				<a id="repeat_request" class="module_action">Repeat Request</a>
 			</div>
 			
 			<!-- ADD OVERLAY -->

@@ -2,8 +2,8 @@
 
 	//Includes
 	include("config.php");
-	include("cache.php");
 	include("db.php");
+    include("search.php");
 	//Entities
 	foreach (glob("entities/*.php") as $filename) include $filename;
 	
@@ -20,15 +20,16 @@
 		public $page;
 		public $cache;
 		public $get;
-		public $pages = array("home", "actionresult", "login", "modules", "requests", "responses", "roomavailability");
+		public $pages = array("home", "actionresult", "login", "modules", "requests", "responses", "roomavailability", "admin");
 		public $title;
 		public $refresh = false;
+        private $startTime;
 		
 		function __construct() {
 			
+            $this->startTime = microtime(true);
 			$this->config = new Config();
 			$this->db     = new Db($this);
-			$this->cache  = new Cache();
 			$this->page   = (isset($_GET["page"]) ? $_GET["page"] : $this->config->general["defaultPage"]);
 			$this->title  = $this->config->general["defaultTitle"];
 			
@@ -39,6 +40,12 @@
 			//See if there is a 'get' to do
 			if (isset($_GET["get"])) $this->get = strtolower($_GET["get"]);
 			else unset($this->get);
+			
+			//Semester change?
+			if (isset($this->get) && $this->get == "semsel" && ($_GET["sem"] == 1 || $_GET["sem"] == 2)) {
+				$this->auth->setUserSemester($_GET["sem"]);
+				return;
+			}
 			
 			//Include requested page
 			if (!in_array($this->page, $this->pages)) {
@@ -83,6 +90,8 @@
 					?>
 				</head>
 				<body>
+				
+					
 			        
 			        <div id="main">
 			        
@@ -150,19 +159,26 @@
 				                
 				                <!-- Semester Title & Buttons -->
 								<div id="semTitle" class="semTitle" >
-									<b> Semester: </b>
-									<span class="semSel">	
-										<input type="radio" id="sem1" name="sem" checked="checked" value="1" /> 1
-										<input type="radio" id="sem2" name="sem" value="2" /> 2
-									</span>
+									<div id="semName">Semester: </div>
+									<div class="semSel">	
+										<p>
+											<input type="radio" id="sem1" name="sem" <?php if ($this->auth->getUserSemester() == 1) echo 'checked="checked"'; ?> value="1" />
+											<label for="sem1">1</label>
+										</p>
+										<p>
+											<input type="radio" id="sem2" name="sem" <?php if ($this->auth->getUserSemester() == 2) echo 'checked="checked"'; ?> value="2" />
+											<label for="sem2">2</label>
+										</p>
+									</div>
 								</div>
 								
 								<!-- Round Indicator -->
-								<div id="ri" class="roundInd"><h3>1</h3></div> 
+								<?php $round = $this->db->getActiveRound(); ?>
+								<div id="ri" class="roundInd"><h3><?php echo $round->getName(); ?></h3></div> 
 								<div class="tooltip">
-									<div><h1>Round 1</h1></div>
-									<div>Start Date: <span id="sdate">wegew</span> </div>
-									<div>End Date: <span id="edate">wrgwe</span> </div>
+									<div><h1>Round <?php echo $round->getName(); ?></h1></div>
+									<div>Start Date: <span id="sdate"><?php echo date("d-m-Y", strtotime($round->getStartDate())); ?></span> </div>
+									<div>End Date: <span id="edate"><?php echo date("d-m-Y", strtotime($round->getEndDate())); ?></span> </div>
 								</div>
 				                
 				                <!-- Logout Button -->
@@ -255,6 +271,10 @@
 			echo json_encode($json);
 			return;
 		}
+        
+        function displayExecutionTime($msg) {
+            echo (microtime(true) - $this->startTime) . " - " . $msg . "<br />";
+        }
 		
 	}
 	

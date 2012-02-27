@@ -3,34 +3,45 @@
 	class Room {
 		
 		private $id;
-		private $name;
+		private $code;
 		private $building;
-		private $park;
 		private $type;
+		private $facilities;
+        private $capacity;
 		
-		public function __construct($id, $name, $building, $park, $type) {
+		public function __construct($id, $code, $building, $type, $facilities, $capacity) {
 			$this->id = $id;
-			$this->name = $name;
+			$this->code = $code;
 			$this->building = $building;
-			$this->park = $park;
-			$this->type = $type;		
+			$this->type = $type;
+			$this->facilities = $facilities;
+            $this->capacity = $capacity;
 		}
 		
 		public function getId() {
 			return $this->id;
 		}
-		public function getName() {
-			return $this->name;
+		public function getCode() {
+			return $this->code;
 		}
 		public function getBuilding() {
 			return $this->building;
 		}
-		public function getPark() {
-			return $this->park;
-		}
 		public function getType() {
 			return $this->type;
 		}
+		public function getFacilities() {
+			return $this->facilities;
+		}
+        public function getCapacity() {
+            return $this->capacity;
+        }
+        
+        public function getAsArray() {
+            $facilities = array();
+            foreach ($this->facilities as $facility) array_push($facilities, get_object_vars($facility));
+            return array("id" => $this->id, "code" => $this->code, "building" => $this->building->getAsArray(), "type" => get_object_vars($this->type), "facilities" => $facilities, "capacity" => $this->capacity);
+        }
 		
 	}
 

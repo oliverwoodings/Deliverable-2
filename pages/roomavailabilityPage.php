@@ -6,29 +6,96 @@
 			
 			$parent->auth->requireLogin();
 			
+			if (isset($parent->get)) {
+				
+				switch($parent->get){
+					case "rooms":
+							$results = $parent->db->getRooms();
+							//Format into JSON-parsable array
+							$returnData = array();
+							foreach($results as $key => $room){
+								$returnData[$key]['name'] = $room->getCode();
+								$building = $room->getBuilding();
+								$returnData[$key]['building'] = $building->getName();
+								$returnData[$key]['park'] = $building->getPark()->getName();
+								$returnData[$key]['type'] = $room->getType()->getName();
+								$returnData[$key]['capacity'] = $room->getCapacity();
+								$facilities = $room->getFacilities();
+								$dataProj = false;
+								$ohp = false;
+								$whiteboard = false;
+								$chalkboard = false;
+								$wheelchair = false;
+								foreach($facilities as $fac){
+									switch($fac->getName()){
+										case "Data Projector":
+											$dataProj = true; break;
+										case "OHP":
+											$ohp = true; break;
+										case "Whiteboard":
+											$whiteboard = true; break;
+										case "Chalkboard":
+											$chalkboard = true; break;
+										case "Wheelchair Access":
+											$wheelchair = true; break;
+									}
+								}
+								$returnData[$key]['dataProj'] = $dataProj;
+								$returnData[$key]['ohp'] = $ohp;
+								$returnData[$key]['whiteboard'] = $whiteboard;
+								$returnData[$key]['chalkboard'] = $chalkboard;
+								$returnData[$key]['wheelchair'] = $wheelchair;
+								
+							}
+	                        //Echo JSON
+	                        echo json_encode($returnData);
+	                        
+							break;
+							
+					case "bookings":
+							$results = $parent->db->getAllocations();
+							$returnData = array();
+							$i = 0;
+							foreach($results as $allocation){
+								if($allocation->getRequest()->getStatus()->getId() != $parent->db->getStatusByName("declined")->getId()){
+									$returnData[$i]['period'] = $allocation->getPeriod();
+									$returnData[$i]['day'] = $allocation->getDay();
+									$returnData[$i]['room'] = $allocation->getRoom()->getCode();
+									$i++;
+								}
+							}
+							//Echo JSON
+		                    echo json_encode($returnData);
+							break;
+				}
+                
+                return;
+			
+			}
+
 			$parent->title = "Home";
 			$parent->displayHeader();
 		
 			?>
-			
-				<!-- World blows up without this - needs changing -->
-				<script type="text/javascript" src="js/pages/roomavailability_data.js"></script>
-
+				<div id="loadingOverlay">
+					<img src="images/loading-bar.gif" />
+					Loading Data...
+				</div>
 				<!------------Overlay Window------------->
 				
 				<div style="display:none;">
 					<div id="av_room_model">
 						<h2 id="model_head">Rooms Avaliable</h2>
                         <div class="resultsContainer">
-                            <table class="resultsTable">
+                            <table cellpadding="0" cellspacing="0" border="0" id="resultsTable" >
                                 <thead>
                                     <tr>
 										<th>Picture</th>
                                         <th>Room</th>
                                         <th>Building</th>
-                                        <th width="50px">Park</th>
-                                        <th width="60px">Capacity</th>
-                                        <th width="80px">Room Type</th>
+                                        <th>Park</th>
+                                        <th>Capacity</th>
+                                        <th>Room Type</th>
                                         <th>Facilities</th>
                                     </tr>
                                 </thead>
@@ -139,7 +206,7 @@
 					<colgroup id="days" span="1"></colgroup>
 					<thead>
 			            <tr>
-			            	<th><h1>Day/Period</h1></th>
+			            	<th></th>
 			                <th>9:00</th>
 			                <th>10:00</th>
 			                <th>11:00</th>

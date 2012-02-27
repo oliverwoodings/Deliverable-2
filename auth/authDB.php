@@ -58,5 +58,17 @@
 			return $this->id;
 		}
 		
+		//Get user semester
+		function getUserSemester() {
+			if (!isset($_SESSION["team03Timetablesemester"])) return 1;
+			else return $_SESSION["team03Timetablesemester"];
+		}
+		
+		//Set user in semester
+		function setUserSemester($semester) {
+			$_SESSION["team03Timetablesemester"] = $semester;
+		}
+			
+		
 	}
 ?>
