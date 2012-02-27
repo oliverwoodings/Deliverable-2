@@ -43,7 +43,7 @@
 			if ($alert) $parent->echoError($alert);
 			
 			?>
-			
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 			<html>
 				<head>
 					<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -68,6 +68,7 @@
 							<p id="logintitle"><h2>Timetabling System</h2></p>
 							<label>Username</label>
 							<div class="ui-widget" id="user_input">
+								<label for="user_combobox"></label>
 								<select id="user_combobox" name="username">
 									<?php
 										$departments = $parent->db->getDepartments();
