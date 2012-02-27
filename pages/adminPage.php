@@ -96,7 +96,7 @@
 								$parent->db->addAllocation($allocation);
 							}
 							
-							$parent->db->addHistory("Allocated Request", $request->getModule()->getCode() . ", " . str_replace(array(1,2,3,4,5), array("Mon", "Tue", "Wed", "Thur", "Fri"), $request->getDay()) . ", Period " . $request->getPeriod());
+							$parent->db->addHistory("Request Allocated", $request->getModule()->getCode() . ", " . str_replace(array(1,2,3,4,5), array("Mon", "Tue", "Wed", "Thur", "Fri"), $request->getDay()) . ", Period " . $request->getPeriod());
 						}else{
 							header("HTTP/1.0 500 Internal Server Error");
         					header('Content-Type: application/json');
@@ -113,15 +113,7 @@
 			
 			?>
 
-	<!--Button which initiates next round and next semester-->
-			<div id="round_num_display">
-				<div id="round_div">
-					<button id="next_round"><h1>GO TO NEXT ROUND</h1></button>
-				</div>
-				<div id="semester_div">
-					<button id="next_semester"><h1>GO TO NEXT SEMESTER</h1></button>
-				</div>
-			</div>
+			
 			
 			<!--Div which Displays Next Round-->
 			<div id="round_display">

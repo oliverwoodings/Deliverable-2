@@ -67,6 +67,7 @@
 				$userStatus = '<a href="index.php?page=login&get=logout">Logout (' . $this->auth->getUsername() . ')</a>';
 				
 			?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 			<html> 
 				<head>
                 	<?php if ($this->refresh) echo '<meta http-equiv="refresh" content="3;url=index.php">'; ?>

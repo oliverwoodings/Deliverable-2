@@ -71,8 +71,10 @@
 								<select id="user_combobox" name="username">
 									<?php
 										$departments = $parent->db->getDepartments();
+										$i = 1;
 										foreach ($departments as $department) {
-											echo "<option>" . $department->getName() . "</option>";
+											echo "<option " . ($i == 1?"selected='selected'":"") . ">" . $department->getName() . "</option>";
+											$i++;
 										}
 									?>
 								</select>
