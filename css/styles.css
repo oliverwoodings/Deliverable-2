@@ -460,7 +460,7 @@ p:not(#foo) > input[type=radio]:disabled:checked + label:hover:active		{ backgro
 
 #main-content {
 	float: left;
-	width: 920;
+	width: 920px;
 	margin-right: 0px;
 	margin-bottom: 0px;
 	padding: 0px;
