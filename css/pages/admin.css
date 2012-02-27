@@ -91,4 +91,11 @@
 	.day {
 		width: 80px;
 	}
+	
+	#rounds li
+	{
+		display: inline;
+		list-style-type: none;
+		padding-right: 20px;
+	}
 
